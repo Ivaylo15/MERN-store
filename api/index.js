@@ -1,11 +1,12 @@
-const express = require('express');
-const app = express();
-const port = 9999;
+const config = require('./config/config');
+const dbConnection = require('./config/database');
 
-app.get('/', (req, res) => {
-    res.send('Hello')
-});
+const app = require('express')();
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
-});
+dbConnection().then(() => {
+
+    require('./config/express')(app);
+    require('./config/routes')(app);
+
+    app.listen(config.port, console.log(`At port ${config.port}`));
+}).catch(console.error);
