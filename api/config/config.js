@@ -1,11 +1,12 @@
-const env = process.env.NODE_ENV || 'development';
+require('dotenv').config();
+
+const env = process.env.NODE_ENV || process.env.ENV;
 
 
 const config = {
     development: {
-        port: process.env.PORT || 9999,
-        dbURL: 'mongodb://localhost:27017/mern-store-api',
-        authCookieName: 'x-auth-token'
+        port: process.env.PORT,
+        dbURL: process.env.DB_URL,
     },
     production: {}
 };
