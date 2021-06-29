@@ -78,7 +78,31 @@ module.exports = {
             results.pageCount = Math.ceil(rawResults.length / limit);
             res.send(results)
         } catch (e) {
-            res.status(500).json({ message: e.message })
+            res.status(500).json({ message: e.message });
+        }
+    },
+    filterOptions: async (req, res, next) => {
+        const filters = {};
+
+        try {
+            const rawResults = await Product.find();
+            const category = [...new Set(rawResults.map(item => item.category))];
+            const size = [...new Set(rawResults.map(item => item.size))];
+            const color = [...new Set(rawResults.map(item => item.color))];
+            if(category) {
+                filters.category = category;
+            }
+            if(size) {
+                filters.size = size;
+            }
+            if(color) {
+                filters.color = color;
+            }
+
+            res.send(filters);
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+
         }
     }
 }

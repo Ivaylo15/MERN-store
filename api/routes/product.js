@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const product = require('../controllers/product');
 
+router.get('/productsFilters', product.filterOptions);
+
 router.get('/products', product.paginatedResults);
 
-router.post('/addProduct', product.addProduct);
+router.post('/products', product.addProduct);
 
-router.put('/editProduct', product.editProduct);
+router.put('/products', product.editProduct);
 
-router.delete('/deleteProduct', product.deleteProduct);
+router.delete('/products', product.deleteProduct);
 
 module.exports = router;
