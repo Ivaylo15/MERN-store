@@ -36,7 +36,7 @@ const Gallery = () => {
                     }
                 </Products>
                 <Pagination>
-                    {products?.previous && (<Button onClick={(() => setCurrPage(currPage - 1))}>Previous</Button>)}
+                    {products?.previous && (<Button onClick={(() => setCurrPage(currPage - 1))}>pppp</Button>)}
                     <div className="flex">
                         {Array(products?.pageCount).fill().map((_, i) => (
                             <PagButton onClick={(() => setCurrPage(i + 1))} currPage={currPage} index={i + 1} key={i}>{i + 1}</PagButton>
