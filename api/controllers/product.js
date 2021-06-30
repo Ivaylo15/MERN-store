@@ -31,8 +31,14 @@ module.exports = {
             res.status(500).json({ message: e.message });
         }
     },
-    filterProducts: async (req, res, next) => {
-        const { category, color, size, price } = req.body;
+    paginatedResults: async (req, res, next) => {
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const category = req.query.category;
+        const color = req.query.color;
+        const size = req.query.size;
+        const price = req.query.price;
+
         let filterObject = {};
         if (category) {
             filterObject.category = category;
@@ -46,18 +52,6 @@ module.exports = {
         if (price) {
             filterObject.price = { $lte: price };
         }
-
-        try {
-            const filteredProduct = await Product.find(filterObject);
-            res.send(filteredProduct);
-        } catch (e) {
-            res.status(500).json({ message: e.message });
-        }
-    },
-    paginatedResults: async (req, res, next) => {
-        const page = parseInt(req.query.page);
-        const limit = parseInt(req.query.limit);
-        console.log(page)
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
@@ -79,12 +73,42 @@ module.exports = {
         }
 
         try {
-            results.results = await Product.find().limit(limit).skip(startIndex).exec();
+            const rawResults = await Product.find(filterObject);
+            results.results = await Product.find(filterObject).limit(limit).skip(startIndex).exec();
+            results.pageCount = Math.ceil(rawResults.length / limit);
             res.send(results)
-            next();
         } catch (e) {
-            res.status(500).json({ message: e.message })
+            res.status(500).json({ message: e.message });
         }
-        console.log(results)
+    },
+    filterOptions: async (req, res, next) => {
+        const category = req.query.category;
+        let filterObject = {};
+        if (category) {
+            filterObject.category = category;
+        }
+
+        const filters = {};
+
+        try {
+            const rawResults = await Product.find(filterObject);
+            const category = [...new Set(rawResults.map(item => item.category))];
+            const size = [...new Set(rawResults.map(item => item.size))];
+            const color = [...new Set(rawResults.map(item => item.color))];
+            if (category) {
+                filters.category = category;
+            }
+            if (size) {
+                filters.size = size;
+            }
+            if (color) {
+                filters.color = color;
+            }
+
+            res.send(filters);
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+
+        }
     }
 }

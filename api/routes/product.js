@@ -1,13 +1,16 @@
 const router = require('express').Router();
 const product = require('../controllers/product');
+const validator = require('../utils/validations');
+const { check } = require('express-validator');
+
+router.get('/productsFilters', product.filterOptions);
 
 router.get('/products', product.paginatedResults);
-router.get('/filteredProducts', product.filterProducts);
 
-router.post('/addProduct', product.addProduct);
+router.post('/products', validator.checkAddProduct, product.addProduct);
 
-router.put('/editProduct', product.editProduct);
+router.put('/products', validator.checkEditProduct, product.editProduct);
 
-router.delete('/deleteProduct', product.deleteProduct);
+router.delete('/products', product.deleteProduct);
 
 module.exports = router;
