@@ -1,7 +1,12 @@
 const Product = require('../models/Product');
+const { validationResult } = require('express-validator');
 
 module.exports = {
     addProduct: async (req, res, next) => {
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(404).json({ errors: errors.array() });
+        // }
         const { title, category, price, size, color, image } = req.body;
 
         try {
@@ -53,6 +58,7 @@ module.exports = {
             filterObject.price = { $lte: price };
         }
 
+        console.log(filterObject)
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
@@ -82,24 +88,31 @@ module.exports = {
         }
     },
     filterOptions: async (req, res, next) => {
+        const category = req.query.category;
+        let filterObject = {};
+        if (category) {
+            filterObject.category = category;
+        }
+
         const filters = {};
 
         try {
-            const rawResults = await Product.find();
+            const rawResults = await Product.find(filterObject);
             const category = [...new Set(rawResults.map(item => item.category))];
             const size = [...new Set(rawResults.map(item => item.size))];
             const color = [...new Set(rawResults.map(item => item.color))];
-            if(category) {
+            if (category) {
                 filters.category = category;
             }
-            if(size) {
+            if (size) {
                 filters.size = size;
             }
-            if(color) {
+            if (color) {
                 filters.color = color;
             }
 
             res.send(filters);
+            console.log(filters)
         } catch (e) {
             res.status(500).json({ message: e.message });
 
