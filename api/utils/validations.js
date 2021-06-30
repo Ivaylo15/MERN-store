@@ -1,41 +1,44 @@
 const { check, validationResult } = require('express-validator');
+const { validationMinLength } = require('../constants/constant-values');
+const status = require('../constants/status-codes');
+const errorMessages = require('../constants/error-messages');
 
 exports.checkAddProduct =
     [
         check('title')
             .trim()
-            .isLength({ min: 3 })
-            .withMessage('Minimum 3 characters required')
+            .isLength({ min: validationMinLength })
+            .withMessage(errorMessages.MinLength)
             .bail(),
         check('category')
             .trim()
-            .isLength({ min: 3 })
-            .withMessage('Minimum 3 characters required')
+            .isLength({ min: validationMinLength })
+            .withMessage(errorMessages.MinLength)
             .bail(),
         check('color')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Color can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .bail(),
         check('size')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Size can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .bail(),
         check('price')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Price can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .isNumeric()
-            .withMessage('Price must be a number')
+            .withMessage(errorMessages.FieldNumber)
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
             if (!errors.isEmpty())
-                return res.status(422).json({ errors: errors.array() });
+                return res.status(status.UnprocessableEntity).json({ errors: errors.array() });
             next();
         }
     ]
@@ -46,37 +49,37 @@ exports.checkEditProduct =
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Can not edit with no id')
+            .withMessage(errorMessages.EmptyField)
             .bail(),
         check('title')
             .trim()
-            .isLength({ min: 3 })
-            .withMessage('Minimum 3 characters required')
+            .isLength({ min: validationMinLength })
+            .withMessage(errorMessages.MinLength)
             .bail(),
         check('category')
             .trim()
-            .isLength({ min: 3 })
-            .withMessage('Minimum 3 characters required')
+            .isLength({ min: validationMinLength })
+            .withMessage(errorMessages.MinLength)
             .bail(),
         check('color')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Color can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .bail(),
         check('size')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Size can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .bail(),
         check('price')
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Price can not be empty')
+            .withMessage(errorMessages.EmptyField)
             .isNumeric()
-            .withMessage('Price must be a number')
+            .withMessage(errorMessages.FieldNumber)
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
