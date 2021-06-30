@@ -3,10 +3,6 @@ const { validationResult } = require('express-validator');
 
 module.exports = {
     addProduct: async (req, res, next) => {
-        // const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     return res.status(404).json({ errors: errors.array() });
-        // }
         const { title, category, price, size, color, image } = req.body;
 
         try {
@@ -112,7 +108,6 @@ module.exports = {
             }
 
             res.send(filters);
-            console.log(filters)
         } catch (e) {
             res.status(500).json({ message: e.message });
 
