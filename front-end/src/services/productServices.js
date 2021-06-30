@@ -21,5 +21,20 @@ export const productService = {
                 dispatch(setFilters(res.data));
             })
             .catch(err => alert(err.message));
+    },
+    addProduct: (title, category, size, color, price, image ) => {
+        axios.post(`//localhost:9999/products`, {
+            title,
+            category,
+            size,
+            color,
+            price,
+            image 
+        })
+        .then(res => {
+            alert('SUCCES')
+            console.log(res)
+        })
+        .catch(err => alert(err.message));
     }
 }
