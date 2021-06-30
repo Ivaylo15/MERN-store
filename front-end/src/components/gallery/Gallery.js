@@ -1,33 +1,89 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from 'styled-components';
+import Filter from "../filter/Filter";
 import Product from '../product/Product';
+import DisplayFilters from '../filter/DisplayFilters';
 
 
 const Gallery = () => {
+    const [filters, setFilters] = useState('');
     const [products, setProducts] = useState('');
     const [currPage, setCurrPage] = useState(1);
+    const [categoryOption, setCategoryOption] = useState({});
+    const [sizeOption, setSizeOption] = useState([]);
+    const [colorOption, setColorOption] = useState([]);
 
     useEffect(() => {
-        axios.get(`//localhost:9999/products?page=${currPage}&limit=12`, {
-            params: {
-                test: 'test'
-            }
-        })
+        const categoryString = new URLSearchParams(categoryOption);
+        const categoryUrl = `&${categoryString.toString()}`;
+        let sizeString = `&size=${sizeOption.toString()}`;
+        let colorString = `&color=${colorOption.toString()}`;
+
+        axios.get(`//localhost:9999/products?page=${currPage}&limit=12${categoryUrl}${sizeString}${colorString}`)
             .then(res => {
                 setProducts(res.data)
             })
             .catch(err => console.log(err));
-    }, [currPage]);
+    }, [currPage, categoryOption, sizeOption, colorOption]);
 
-    console.log(products)
+    useEffect(() => {
+        axios.get(`//localhost:9999/productsFilters`)
+            .then(res => {
+                setFilters(res.data)
+            })
+            .catch(err => console.log(err));
+    }, [categoryOption]);
+
+    const removeCategory = () => {
+        setCategoryOption({})
+    }
+
+    const removeFilter = (filterType, value) => {
+        if (filterType === 'size') {
+            const newArray = sizeOption.filter(i => i !== value)
+
+            setSizeOption(newArray)
+        } else if (filterType === 'color') {
+            const newArray = colorOption.filter(i => i !== value)
+
+            setColorOption(newArray)
+        }
+    }
+
+    const addFilterOptions = (filterType, value) => {
+        const filter = {};
+        if (filterType === 'category') {
+            if (value) {
+                filter[filterType] = value;
+                setCategoryOption(filter)
+            } else {
+                setCategoryOption({})
+            }
+        } else if (filterType === 'size') {
+            if (!sizeOption.includes(value)) {
+                setSizeOption((sizeOption) => [...sizeOption, value]);
+            }
+        } else if (filterType === 'color') {
+            if (!colorOption.includes(value)) {
+                setColorOption((colorOption) => [...colorOption, value]);
+            }
+        }
+    }
 
     return (
         <Container>
             <FilterContainer>
-                filter
+                <Filter addFilterOptions={addFilterOptions} title='Category' filterOptions={filters?.category} />
+                <Filter addFilterOptions={addFilterOptions} title='Size' filterOptions={filters?.size} />
+                <Filter addFilterOptions={addFilterOptions} title='Color' filterOptions={filters?.color} />
             </FilterContainer>
             <ProductContainer>
+                <ChosenOptions>
+                    <p onClick={removeCategory}>{categoryOption.category}</p>
+                    <DisplayFilters removeFilter={removeFilter} type='size' options={sizeOption} />
+                    <DisplayFilters removeFilter={removeFilter} type='color' options={colorOption} />
+                </ChosenOptions>
                 <Products>
                     {
                         products?.results?.map(({ _id, title, category, size, color, price, image }) => (
@@ -61,6 +117,7 @@ const Container = styled.div`
 
 const FilterContainer = styled.div`
     width: 20%;
+    padding: 1rem;
 `;
 
 const ProductContainer = styled.div`
@@ -71,8 +128,26 @@ const ProductContainer = styled.div`
     justify-content: space-between;
 `;
 
+const ChosenOptions = styled.div`
+    border-bottom: 1px solid #ccc;
+    height: 1vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    p{
+        margin-left: 1rem;
+    }
+
+    p:hover {
+        color: red;
+    }
+`;
+
 const Products = styled.div`
-    height: 80%;
+    min-height: 70vh;
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;
