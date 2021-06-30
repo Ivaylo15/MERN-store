@@ -1,39 +1,30 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from 'styled-components';
 import Filter from "../filter/Filter";
 import Product from '../product/Product';
 import DisplayFilters from '../filter/DisplayFilters';
+import { productService } from "../../services/productServices";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilters, selectProduct } from "../../redux/productSlice";
 
 
 const Gallery = () => {
-    const [filters, setFilters] = useState('');
-    const [products, setProducts] = useState('');
+    const dispatch = useDispatch();
+    const products = useSelector(selectProduct); 
+    const filters = useSelector(selectFilters); 
     const [currPage, setCurrPage] = useState(1);
     const [categoryOption, setCategoryOption] = useState({});
     const [sizeOption, setSizeOption] = useState([]);
     const [colorOption, setColorOption] = useState([]);
 
     useEffect(() => {
-        const categoryString = new URLSearchParams(categoryOption);
-        const categoryUrl = `&${categoryString.toString()}`;
-        let sizeString = `&size=${sizeOption.toString()}`;
-        let colorString = `&color=${colorOption.toString()}`;
+        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption);
 
-        axios.get(`//localhost:9999/products?page=${currPage}&limit=12${categoryUrl}${sizeString}${colorString}`)
-            .then(res => {
-                setProducts(res.data)
-            })
-            .catch(err => console.log(err));
-    }, [currPage, categoryOption, sizeOption, colorOption]);
+    }, [dispatch, currPage, categoryOption, sizeOption, colorOption]);
 
     useEffect(() => {
-        axios.get(`//localhost:9999/productsFilters`)
-            .then(res => {
-                setFilters(res.data)
-            })
-            .catch(err => console.log(err));
-    }, [categoryOption]);
+        productService.getFilters(dispatch);
+    }, [dispatch]);
 
     const removeCategory = () => {
         setCategoryOption({})
@@ -41,12 +32,10 @@ const Gallery = () => {
 
     const removeFilter = (filterType, value) => {
         if (filterType === 'size') {
-            const newArray = sizeOption.filter(i => i !== value)
-
+            const newArray = sizeOption.filter(size => size !== value)
             setSizeOption(newArray)
         } else if (filterType === 'color') {
-            const newArray = colorOption.filter(i => i !== value)
-
+            const newArray = colorOption.filter(color => color !== value)
             setColorOption(newArray)
         }
     }
