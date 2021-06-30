@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const { validationResult } = require('express-validator');
 
 module.exports = {
     addProduct: async (req, res, next) => {
@@ -54,7 +53,6 @@ module.exports = {
             filterObject.price = { $lte: price };
         }
 
-        console.log(filterObject)
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 

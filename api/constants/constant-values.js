@@ -1,3 +1,3 @@
 module.exports = {
-    validationMinLength: 3
+    ValidationMinLength: 3
 }
