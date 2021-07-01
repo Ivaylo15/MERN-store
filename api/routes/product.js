@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const product = require('../controllers/product');
 const validator = require('../utils/validations');
-const { check } = require('express-validator');
 
 router.get('/productsFilters', product.filterOptions);
 
 router.get('/products', product.paginatedResults);
+
+router.get('/product', product.singleProduct);
 
 router.post('/products', validator.checkAddProduct, product.addProduct);
 

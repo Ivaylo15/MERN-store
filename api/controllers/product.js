@@ -109,7 +109,15 @@ module.exports = {
             res.send(filters);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
-
+        }
+    },
+    singleProduct: async (req, res, next) => {
+        const productId = req.query.id;
+        try {
+            const result = await Product.findOne({ _id: productId });
+            res.status(statusCodes.OK).send(result);
+        } catch (e) {
+            res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
     }
 }
