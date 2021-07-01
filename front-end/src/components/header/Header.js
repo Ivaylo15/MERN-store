@@ -1,27 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
-    return (
-        <Container>
-            <LeftContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <LinkStyle>
-                        Gallery
-                    </LinkStyle>
-                </Link>
-                <Link to="/add" style={{ textDecoration: 'none' }}>
-                    <LinkStyle>
-                        Add Product
-                    </LinkStyle>
-                </Link>
-            </LeftContainer>
-        </Container>
-    )
-}
-
-export default Header;
-
 const Container = styled.div`
     background-color: whitesmoke;
     height: 4rem;
@@ -43,3 +22,26 @@ const LinkStyle = styled.div`
         color: red;
     }
 `
+
+const Header = () => {
+    return (
+        <Container>
+            <LeftContainer>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <LinkStyle>
+                        Gallery
+                    </LinkStyle>
+                </Link>
+                <Link to="/add" style={{ textDecoration: 'none' }}>
+                    <LinkStyle>
+                        Add Product
+                    </LinkStyle>
+                </Link>
+            </LeftContainer>
+        </Container>
+    )
+}
+
+export default Header;
+
+
