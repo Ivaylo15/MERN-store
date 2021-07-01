@@ -6,7 +6,7 @@ router.get('/productsFilters', product.filterOptions);
 
 router.get('/products', product.paginatedResults);
 
-router.get('/product', product.singleProduct);
+router.get('/product/:id', product.singleProduct);
 
 router.post('/products', validator.checkAddProduct, product.addProduct);
 

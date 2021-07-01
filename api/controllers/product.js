@@ -112,7 +112,7 @@ module.exports = {
         }
     },
     singleProduct: async (req, res, next) => {
-        const productId = req.query.id;
+        const productId = req.params.id;
         try {
             const result = await Product.findOne({ _id: productId });
             res.status(statusCodes.OK).send(result);
