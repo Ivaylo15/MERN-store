@@ -30,7 +30,7 @@ const DisplayFilters = ({ removeFilter, filterType, options }) => {
 }
 
 DisplayFilters.propTypes = {
-    removeFilter: PropTypes.func,
+    removeFilter: PropTypes.func.isRequired,
     filterType: PropTypes.string,
     options: PropTypes.array
 }

@@ -38,7 +38,7 @@ const Price = styled.p`
 `;
 
 
-const Product = ({ id, title, category, size, color, price, image }) => {
+const Product = ({ title, category, size, color, price, image }) => {
     return (
         <Container>
             <Image loading='lazy' src={image} alt="product" />
@@ -52,13 +52,12 @@ const Product = ({ id, title, category, size, color, price, image }) => {
 }
 
 Product.propTypes = {
-    id: PropTypes.string,
-    title: PropTypes.string,
-    category: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     size: PropTypes.string,
     color: PropTypes.string,
-    price: PropTypes.number,
-    image: PropTypes.string,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
 }
 
 export default Product;

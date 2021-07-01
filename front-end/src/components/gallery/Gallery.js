@@ -143,18 +143,18 @@ const Gallery = () => {
                 <Products>
                     {
                         products?.results?.map(({ _id, title, category, size, color, price, image }) => (
-                            <Product key={_id} id={_id} title={title} category={category} size={size} color={color} price={price} image={image} />
+                            <Product key={_id} title={title} category={category} size={size} color={color} price={price} image={image} />
                         ))
                     }
                 </Products>
                 <Pagination>
                     {products?.previous && (<Button onClick={(() => setCurrPage(currPage - 1))}>Previous</Button>)}
                     <div className="flex">
-                        {Array(products?.pageCount).fill().map((_, i) => (
-                            <PagButton onClick={(() => setCurrPage(i + 1))} currPage={currPage} index={i + 1} key={i}>{i + 1}</PagButton>
+                        {Array(products?.pageCount).fill().map((_, index) => (
+                            <PagButton onClick={(() => setCurrPage(index + 1))} currPage={currPage} index={index + 1} key={index}>{index + 1}</PagButton>
                         ))}
                     </div>
-                    {products?.next && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
+                    {products.results.length >= 12 && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
                 </Pagination>
             </ProductContainer>
         </Container>

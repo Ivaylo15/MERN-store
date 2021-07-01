@@ -38,7 +38,7 @@ const Filter = ({ addFilterOptions, title, filterOptions }) => {
 }
 
 Filter.propTypes = {
-    addFilterOptions: PropTypes.func,
+    addFilterOptions: PropTypes.func.isRequired,
     title: PropTypes.string,
     filter: PropTypes.array
 }
