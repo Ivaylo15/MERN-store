@@ -7,7 +7,7 @@ module.exports = {
 
         try {
             const createdProduct = await Product.create({ title, category, size, color, price, image });
-            res.send(createdProduct);
+            res.status(statusCodes.OK).send(createdProduct);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
