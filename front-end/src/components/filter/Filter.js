@@ -1,21 +1,5 @@
 import styled from 'styled-components';
-
-
-const Filter = ({ addFilterOptions, title, filterOptions }) => {
-
-    return (
-        <Container>
-            <Title onClick={(() => addFilterOptions(title.toLowerCase(), null))}>{title}</Title>
-            <div>
-                {filterOptions?.map(item => (
-                    <Link key={item} onClick={(() => addFilterOptions(title.toLowerCase(), item))}>{item}</Link>
-                ))}
-            </div>
-        </Container>
-    )
-}
-
-export default Filter;
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
     margin: 1rem;
@@ -39,3 +23,25 @@ const Link = styled.p`
         color: #000;
     }
 `;
+
+const Filter = ({ addFilterOptions, title, filterOptions }) => {
+    return (
+        <Container>
+            <Title onClick={(() => addFilterOptions(title.toLowerCase(), null))}>{title}</Title>
+            <div>
+                {filterOptions?.map(item => (
+                    <Link key={item} onClick={(() => addFilterOptions(title.toLowerCase(), item))}>{item}</Link>
+                ))}
+            </div>
+        </Container>
+    )
+}
+
+Filter.propTypes = {
+    addFilterOptions: PropTypes.func,
+    title: PropTypes.string,
+    filter: PropTypes.array
+}
+
+export default Filter;
+

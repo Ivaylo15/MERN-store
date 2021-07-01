@@ -1,21 +1,5 @@
 import styled from 'styled-components';
-
-
-const Product = ({ id, title, category, size, color, price, image }) => {
-    const checkImage = image || 'https://assets.adidas.com/images/w_600,f_auto,q_auto/0a4e5e0b39f34d69a88cab730101f847_9366/Manchester_United_20-21_Home_Youth_Kit_Red_FM4288.jpg';
-    return (
-        <Container>
-            <Image loading='lazy' src={checkImage} alt="product" />
-            <div>
-                <Category>{category}</Category>
-                <Title>{title}</Title>
-                <Price>{price} $</Price>
-            </div>
-        </Container>
-    )
-}
-
-export default Product;
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
     margin: 1rem;
@@ -52,4 +36,32 @@ const Price = styled.p`
     font-size: large;
     font-weight: bold;
 `;
+
+
+const Product = ({ id, title, category, size, color, price, image }) => {
+    return (
+        <Container>
+            <Image loading='lazy' src={image} alt="product" />
+            <div>
+                <Category>{category}</Category>
+                <Title>{title}</Title>
+                <Price>{price} $</Price>
+            </div>
+        </Container>
+    )
+}
+
+Product.propTypes = {
+    id: PropTypes.string,
+    title: PropTypes.string,
+    category: PropTypes.string,
+    size: PropTypes.string,
+    color: PropTypes.string,
+    price: PropTypes.number,
+    image: PropTypes.string,
+}
+
+export default Product;
+
+
 

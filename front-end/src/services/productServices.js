@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { messages } from '../constants/success-messages';
 import { setFilters, setProduct } from '../redux/productSlice';
 
 export const productService = {
@@ -9,21 +10,21 @@ export const productService = {
         let sizeUrl = `&size=${sizeOption.toString()}`;
         let colorUrl = `&color=${colorOption.toString()}`;
 
-        axios.get(`//localhost:9999/products?page=${currPage}&limit=12${categoryUrl}${sizeUrl}${colorUrl}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}products?page=${currPage}&limit=12${categoryUrl}${sizeUrl}${colorUrl}`)
             .then(res => {
                 dispatch(setProduct(res.data))
             })
             .catch(err => alert(err.message));
     },
     getFilters: (dispatch) => {
-        axios.get(`//localhost:9999/productsFilters`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}productsFilters`)
             .then(res => {
                 dispatch(setFilters(res.data));
             })
             .catch(err => alert(err.message));
     },
     addProduct: (title, category, size, color, price, image ) => {
-        axios.post(`//localhost:9999/products`, {
+        axios.post(`${process.env.REACT_APP_BASE_URL}products`, {
             title,
             category,
             size,
@@ -32,8 +33,7 @@ export const productService = {
             image 
         })
         .then(res => {
-            alert('SUCCES')
-            console.log(res)
+            alert(messages.success)
         })
         .catch(err => alert(err.message));
     }

@@ -1,17 +1,6 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-
-const DisplayFilters = ({ removeFilter, type, options }) => {
-    return (
-        <Container>
-            {options?.map((item, i) => (
-                <p key={i} onClick={(() => removeFilter(type, item))}>{item}</p>
-            ))}
-        </Container>
-    )
-}
-
-export default DisplayFilters;
 
 const Container = styled.div`
     height: 1vh;
@@ -27,3 +16,24 @@ const Container = styled.div`
         color: red;
     }
 `;
+
+
+
+const DisplayFilters = ({ removeFilter, filterType, options }) => {
+    return (
+        <Container>
+            {options?.map((item, index) => (
+                <p key={index} onClick={(() => removeFilter(filterType, item))}>{item}</p>
+            ))}
+        </Container>
+    )
+}
+
+DisplayFilters.propTypes = {
+    removeFilter: PropTypes.func,
+    filterType: PropTypes.string,
+    options: PropTypes.array
+}
+
+export default DisplayFilters;
+
