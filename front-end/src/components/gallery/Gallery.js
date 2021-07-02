@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import Filter from "../filter/Filter";
 import Product from '../product/Product';
 import DisplayFilters from '../filter/DisplayFilters';
+import { useHistory, useLocation } from 'react-router-dom';
 import { productService } from "../../services/productServices";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, selectProduct } from "../../redux/productSlice";
+import { utilFunc } from "../../services/utils";
 
 const Container = styled.div`
     width: 80%;
@@ -93,29 +95,71 @@ const PagButton = styled.button`
 
 const Gallery = () => {
     const dispatch = useDispatch();
+    const { search } = useLocation();
+    const searchParams = new URLSearchParams(search);
+
+    const history = useHistory();
     const products = useSelector(selectProduct);
     const filters = useSelector(selectFilters);
     const [currPage, setCurrPage] = useState(1);
-    const [categoryOption, setCategoryOption] = useState({});
+    const [categoryOption, setCategoryOption] = useState('');
     const [sizeOption, setSizeOption] = useState([]);
     const [colorOption, setColorOption] = useState([]);
-    const [priceOption, setPriceOption] = useState({});
+    const [priceOption, setPriceOption] = useState('');
+
 
     useEffect(() => {
-        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption);
+        if (searchParams.get('category')) {
+            setCategoryOption(searchParams.get('category'))
+        }
+        if (searchParams.get('size')) {
+            setSizeOption((sizeOption) => [...sizeOption, searchParams.get('size')]);
+        }
+        if (searchParams.get('color')) {
+            setColorOption((colorOption) => [...colorOption, searchParams.get('color')]);
+        }
+        if (searchParams.get('prise')) {
+            setPriceOption(searchParams.get('prise'))
 
-    }, [dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption]);
+        }
+    }, [])
+
+    useEffect(() => {
+        let categoryUrl = '';
+        let sizeUrl = '';
+        let colorUrl = '';
+        let priceUrl = '';
+        if (categoryOption) {
+            categoryUrl = utilFunc.stringifyUrl('category', categoryOption);
+        }
+        if (sizeOption.length > 0) {
+            sizeUrl = utilFunc.stringifyUrl('size', sizeOption);
+        }
+        if (colorOption.length > 0) {
+            colorUrl = utilFunc.stringifyUrl('color', colorOption);
+        }
+        if (priceOption) {
+            priceUrl = utilFunc.stringifyUrl('price', priceOption);
+        }
+        console.log(colorUrl)
+
+        history.push({
+            pathname: '/',
+            search: `?${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`
+        })
+        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption);
+    }, [dispatch, history, currPage, categoryOption, sizeOption, colorOption, priceOption]);
 
     useEffect(() => {
         productService.getFilters(dispatch);
     }, [dispatch]);
 
     const removeCategory = () => {
-        setCategoryOption({})
+        setCategoryOption('')
     }
 
     const removePrice = () => {
-        setPriceOption({})
+        setPriceOption('')
     }
 
     const removeFilter = (filterType, value) => {
@@ -129,13 +173,11 @@ const Gallery = () => {
     }
 
     const addFilterOptions = (filterType, value) => {
-        const filter = {};
         if (filterType === 'category') {
             if (value) {
-                filter[filterType] = value;
-                setCategoryOption(filter)
+                setCategoryOption(value)
             } else {
-                setCategoryOption({})
+                setCategoryOption('')
             }
         } else if (filterType === 'size') {
             if (!sizeOption.includes(value)) {
@@ -146,8 +188,7 @@ const Gallery = () => {
                 setColorOption((colorOption) => [...colorOption, value]);
             }
         } else if (filterType === 'price') {
-            filter[filterType] = value;
-            setPriceOption(filter)
+            setPriceOption(value)
         }
     }
 
@@ -160,7 +201,7 @@ const Gallery = () => {
             </FilterContainer>
             <ProductContainer>
                 <ChosenOptions>
-                    <p onClick={removeCategory}>{categoryOption.category}</p>
+                    <p onClick={removeCategory}>{categoryOption}</p>
                     <DisplayFilters removeFilter={removeFilter} filterType='size' options={sizeOption} />
                     <DisplayFilters removeFilter={removeFilter} filterType='color' options={colorOption} />
                     <div>
