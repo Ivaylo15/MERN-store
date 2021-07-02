@@ -17,10 +17,15 @@ export const productService = {
             })
             .catch(err => alert(err.message));
     },
-    getSingeProduct: (productId, setProduct) => {
+    getSingeProduct: (productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl) => {
         axios.get(`${process.env.REACT_APP_BASE_URL}product/${productId}`)
             .then(res => {
-                setProduct(res.data);
+                setTitle(res.data.title);
+                setCategory(res.data.category);
+                setSize(res.data.size);
+                setColor(res.data.color);
+                setPrice(res.data.price);
+                setImageUrl(res.data.image);
             })
             .catch(err => alert(err.message));
     },
@@ -45,11 +50,25 @@ export const productService = {
             })
             .catch(err => alert(err.message));
     },
+    editProduct: (id, title, category, size, color, price, image, redirect) => {
+        axios.put(`${process.env.REACT_APP_BASE_URL}products`, {
+            id,
+            title,
+            category,
+            size,
+            color,
+            price,
+            image
+        })
+            .then(res => {
+                alert(messages.success);
+            })
+            .catch(err => alert(err.message));
+    },
     deleteProduct: (productId, redirect) => {
         axios.delete(`${process.env.REACT_APP_BASE_URL}products/${productId}`)
             .then(res => {
                 alert(productId + 'deleted')
-                redirect.push('/');
             })
             .catch(err => alert(err.message));
     }

@@ -74,9 +74,9 @@ const SortButtons = styled.div`
 
 const Products = styled.div`
     min-height: 70vh;
-    padding: 1rem;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 `;
 
 const Pagination = styled.div`
