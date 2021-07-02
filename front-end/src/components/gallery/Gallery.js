@@ -30,7 +30,7 @@ const ProductContainer = styled.div`
 
 const ChosenOptions = styled.div`
     border-bottom: 1px solid #ccc;
-    height: 1vh;
+    height: 6vh;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -43,6 +43,22 @@ const ChosenOptions = styled.div`
 
     p:hover {
         color: red;
+    }
+    div {
+        margin-left: auto;
+        padding: 0.5rem;
+        button {
+            padding: 0.5rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            border: none;
+            margin: 0.5rem;
+            cursor: pointer;
+            :hover{
+                background-color: #bbb;
+                color: white;
+            }
+        }
     }
 `;
 
@@ -77,17 +93,18 @@ const PagButton = styled.button`
 
 const Gallery = () => {
     const dispatch = useDispatch();
-    const products = useSelector(selectProduct); 
-    const filters = useSelector(selectFilters); 
+    const products = useSelector(selectProduct);
+    const filters = useSelector(selectFilters);
     const [currPage, setCurrPage] = useState(1);
     const [categoryOption, setCategoryOption] = useState({});
     const [sizeOption, setSizeOption] = useState([]);
     const [colorOption, setColorOption] = useState([]);
+    const [priceOption, setPriceOption] = useState({});
 
     useEffect(() => {
-        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption);
+        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption);
 
-    }, [dispatch, currPage, categoryOption, sizeOption, colorOption]);
+    }, [dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption]);
 
     useEffect(() => {
         productService.getFilters(dispatch);
@@ -95,6 +112,10 @@ const Gallery = () => {
 
     const removeCategory = () => {
         setCategoryOption({})
+    }
+
+    const removePrice = () => {
+        setPriceOption({})
     }
 
     const removeFilter = (filterType, value) => {
@@ -124,6 +145,9 @@ const Gallery = () => {
             if (!colorOption.includes(value)) {
                 setColorOption((colorOption) => [...colorOption, value]);
             }
+        } else if (filterType === 'price') {
+            filter[filterType] = value;
+            setPriceOption(filter)
         }
     }
 
@@ -139,6 +163,11 @@ const Gallery = () => {
                     <p onClick={removeCategory}>{categoryOption.category}</p>
                     <DisplayFilters removeFilter={removeFilter} filterType='size' options={sizeOption} />
                     <DisplayFilters removeFilter={removeFilter} filterType='color' options={colorOption} />
+                    <div>
+                        <p onClick={removePrice}>Sort by price</p>
+                        <button onClick={() => addFilterOptions('price', 'desc')}>Lower</button>
+                        <button onClick={() => addFilterOptions('price', 'asc')}>Higher</button>
+                    </div>
                 </ChosenOptions>
                 <Products>
                     {
@@ -154,7 +183,7 @@ const Gallery = () => {
                             <PagButton onClick={(() => setCurrPage(index + 1))} currPage={currPage} index={index + 1} key={index}>{index + 1}</PagButton>
                         ))}
                     </div>
-                    {products.results.length >= 12 && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
+                    {products?.results?.length >= 12 && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
                 </Pagination>
             </ProductContainer>
         </Container>

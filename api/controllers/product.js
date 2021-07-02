@@ -41,17 +41,18 @@ module.exports = {
         const price = req.query.price;
 
         let filterObject = {};
+        let sortObject = {};
         if (category) {
             filterObject.category = category;
         }
         if (color) {
-            filterObject.color = color;
+            filterObject.color = { $in: color.split(',') };
         }
         if (size) {
-            filterObject.size = size;
+            filterObject.size = { $in: size.split(',') };
         }
         if (price) {
-            filterObject.price = { $lte: price };
+            sortObject.price = price;
         }
 
         const startIndex = (page - 1) * limit;
@@ -75,7 +76,7 @@ module.exports = {
 
         try {
             const rawResults = await Product.find(filterObject);
-            results.results = await Product.find(filterObject).limit(limit).skip(startIndex).exec();
+            results.results = await Product.find(filterObject).sort(sortObject).limit(limit).skip(startIndex).exec();
             results.pageCount = Math.ceil(rawResults.length / limit);
             res.status(statusCodes.OK).send(results)
         } catch (e) {
