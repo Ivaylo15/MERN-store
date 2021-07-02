@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import Filter from "../filter/Filter";
 import Product from '../product/Product';
 import DisplayFilters from '../filter/DisplayFilters';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { productService } from "../../services/productServices";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, selectProduct } from "../../redux/productSlice";
 import { utilFunc } from "../../services/utils";
+import { constants } from "../../constants/constants";
 
 const Container = styled.div`
     width: 80%;
@@ -15,6 +16,11 @@ const Container = styled.div`
     background-color: whitesmoke;
     margin: 0 auto 0 auto;
     display: flex;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
 `;
 
 const FilterContainer = styled.div`
@@ -46,20 +52,22 @@ const ChosenOptions = styled.div`
     p:hover {
         color: red;
     }
-    div {
-        margin-left: auto;
-        padding: 0.5rem;
+   
+`;
+
+const SortButtons = styled.div`
+    margin-left: auto;
+    padding: 0.5rem;
         button {
-            padding: 0.5rem;
-            background-color: white;
-            border-radius: 0.5rem;
-            border: none;
-            margin: 0.5rem;
-            cursor: pointer;
-            :hover{
-                background-color: #bbb;
-                color: white;
-            }
+        padding: 0.5rem;
+        background-color: white;
+        border-radius: 0.5rem;
+        border: none;
+        margin: 0.5rem;
+        cursor: pointer;
+        :hover{
+            background-color: #bbb;
+            color: white;
         }
     }
 `;
@@ -97,7 +105,6 @@ const Gallery = () => {
     const dispatch = useDispatch();
     const { search } = useLocation();
     const searchParams = new URLSearchParams(search);
-
     const history = useHistory();
     const products = useSelector(selectProduct);
     const filters = useSelector(selectFilters);
@@ -113,10 +120,10 @@ const Gallery = () => {
             setCategoryOption(searchParams.get('category'))
         }
         if (searchParams.get('size')) {
-            setSizeOption((sizeOption) => [...sizeOption, searchParams.get('size')]);
+            setSizeOption((sizeOption) => [...sizeOption, ...searchParams.get('size').split(',')]);
         }
         if (searchParams.get('color')) {
-            setColorOption((colorOption) => [...colorOption, searchParams.get('color')]);
+            setColorOption((colorOption) => [...colorOption, ...searchParams.get('color').split(',')]);
         }
         if (searchParams.get('prise')) {
             setPriceOption(searchParams.get('prise'))
@@ -141,7 +148,6 @@ const Gallery = () => {
         if (priceOption) {
             priceUrl = utilFunc.stringifyUrl('price', priceOption);
         }
-        console.log(colorUrl)
 
         history.push({
             pathname: '/',
@@ -204,16 +210,18 @@ const Gallery = () => {
                     <p onClick={removeCategory}>{categoryOption}</p>
                     <DisplayFilters removeFilter={removeFilter} filterType='size' options={sizeOption} />
                     <DisplayFilters removeFilter={removeFilter} filterType='color' options={colorOption} />
-                    <div>
+                    <SortButtons>
                         <p onClick={removePrice}>Sort by price</p>
                         <button onClick={() => addFilterOptions('price', 'desc')}>Lower</button>
                         <button onClick={() => addFilterOptions('price', 'asc')}>Higher</button>
-                    </div>
+                    </SortButtons>
                 </ChosenOptions>
                 <Products>
                     {
                         products?.results?.map(({ _id, title, category, size, color, price, image }) => (
-                            <Product key={_id} title={title} category={category} size={size} color={color} price={price} image={image} />
+                            <Link to={`/${_id}`}>
+                                <Product key={_id} title={title} category={category} size={size} color={color} price={price} image={image} />
+                            </Link>
                         ))
                     }
                 </Products>
@@ -224,7 +232,7 @@ const Gallery = () => {
                             <PagButton onClick={(() => setCurrPage(index + 1))} currPage={currPage} index={index + 1} key={index}>{index + 1}</PagButton>
                         ))}
                     </div>
-                    {products?.results?.length >= 12 && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
+                    {products?.results?.length >= constants.productCount && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
                 </Pagination>
             </ProductContainer>
         </Container>

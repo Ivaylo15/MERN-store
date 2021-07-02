@@ -13,7 +13,6 @@ module.exports = {
         }
     },
     editProduct: async (req, res, next) => {
-        // const id = req.params.id;
         const { id, title, category, size, color, price, image } = req.body;
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
@@ -23,10 +22,10 @@ module.exports = {
         }
     },
     deleteProduct: async (req, res, next) => {
-        const { id } = req.body;
+        const productId = req.params.id;
 
         try {
-            const deletedProduct = await Product.deleteOne({ _id: id });
+            const deletedProduct = await Product.deleteOne({ _id: productId });
             res.send(deletedProduct);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
@@ -40,8 +39,8 @@ module.exports = {
         const size = req.query.size;
         const price = req.query.price;
 
-        let filterObject = {};
-        let sortObject = {};
+        const filterObject = {};
+        const sortObject = {};
         if (category) {
             filterObject.category = category;
         }

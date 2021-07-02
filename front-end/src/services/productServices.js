@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { constants } from '../constants/constants';
 import { messages } from '../constants/success-messages';
 import { setFilters, setProduct } from '../redux/productSlice';
 import { utilFunc } from './utils';
@@ -10,9 +11,16 @@ export const productService = {
         const colorUrl = utilFunc.stringifyUrl('color', colorOption);
         const priceUrl = utilFunc.stringifyUrl('price', priceOption);
 
-        axios.get(`${process.env.REACT_APP_BASE_URL}products?page=${currPage}&limit=12${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}products?page=${currPage}&limit=${constants.productCount}${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`)
             .then(res => {
                 dispatch(setProduct(res.data))
+            })
+            .catch(err => alert(err.message));
+    },
+    getSingeProduct: (productId, setProduct) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}product/${productId}`)
+            .then(res => {
+                setProduct(res.data);
             })
             .catch(err => alert(err.message));
     },
@@ -34,6 +42,14 @@ export const productService = {
         })
             .then(res => {
                 alert(messages.success)
+            })
+            .catch(err => alert(err.message));
+    },
+    deleteProduct: (productId, redirect) => {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}products/${productId}`)
+            .then(res => {
+                alert(productId + 'deleted')
+                redirect.push('/');
             })
             .catch(err => alert(err.message));
     }
