@@ -14,6 +14,7 @@ module.exports = {
     },
     editProduct: async (req, res, next) => {
         const { id, title, category, size, color, price, image } = req.body;
+
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
             res.send(updatedProduct);
@@ -41,6 +42,7 @@ module.exports = {
 
         const filterObject = {};
         const sortObject = {};
+
         if (category) {
             filterObject.category = category;
         }
@@ -84,7 +86,9 @@ module.exports = {
     },
     filterOptions: async (req, res, next) => {
         const category = req.query.category;
-        let filterObject = {};
+
+        const filterObject = {};
+        
         if (category) {
             filterObject.category = category;
         }

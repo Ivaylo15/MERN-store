@@ -14,7 +14,7 @@ const Container = styled.div`
     width: 80%;
     min-height: 100vh;
     background-color: whitesmoke;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
     display: flex;
 
     a {
@@ -48,7 +48,6 @@ const ChosenOptions = styled.div`
     p{
         margin-left: 1rem;
     }
-
     p:hover {
         color: red;
     }
@@ -114,20 +113,18 @@ const Gallery = () => {
     const [colorOption, setColorOption] = useState([]);
     const [priceOption, setPriceOption] = useState('');
 
-
     useEffect(() => {
-        if (searchParams.get('category')) {
-            setCategoryOption(searchParams.get('category'))
+        if (searchParams.get(constants.filterCategory)) {
+            setCategoryOption(searchParams.get(constants.filterCategory))
         }
-        if (searchParams.get('size')) {
-            setSizeOption((sizeOption) => [...sizeOption, ...searchParams.get('size').split(',')]);
+        if (searchParams.get(constants.filterSize)) {
+            setSizeOption((sizeOption) => [...sizeOption, ...searchParams.get(constants.filterSize).split(',')]);
         }
-        if (searchParams.get('color')) {
-            setColorOption((colorOption) => [...colorOption, ...searchParams.get('color').split(',')]);
+        if (searchParams.get(constants.filterColor)) {
+            setColorOption((colorOption) => [...colorOption, ...searchParams.get(constants.filterColor).split(',')]);
         }
-        if (searchParams.get('prise')) {
-            setPriceOption(searchParams.get('prise'))
-
+        if (searchParams.get(constants.filterPrice)) {
+            setPriceOption(searchParams.get(constants.filterPrice))
         }
     }, [])
 
@@ -137,16 +134,16 @@ const Gallery = () => {
         let colorUrl = '';
         let priceUrl = '';
         if (categoryOption) {
-            categoryUrl = utilFunc.stringifyUrl('category', categoryOption);
+            categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
         }
         if (sizeOption.length > 0) {
-            sizeUrl = utilFunc.stringifyUrl('size', sizeOption);
+            sizeUrl = utilFunc.stringifyUrl(constants.filterSize, sizeOption);
         }
         if (colorOption.length > 0) {
-            colorUrl = utilFunc.stringifyUrl('color', colorOption);
+            colorUrl = utilFunc.stringifyUrl(constants.filterColor, colorOption);
         }
         if (priceOption) {
-            priceUrl = utilFunc.stringifyUrl('price', priceOption);
+            priceUrl = utilFunc.stringifyUrl(constants.filterPrice, priceOption);
         }
 
         history.push({
@@ -169,31 +166,31 @@ const Gallery = () => {
     }
 
     const removeFilter = (filterType, value) => {
-        if (filterType === 'size') {
+        if (filterType === constants.filterSize) {
             const newArray = sizeOption.filter(size => size !== value)
             setSizeOption(newArray)
-        } else if (filterType === 'color') {
+        } else if (filterType === constants.filterColor) {
             const newArray = colorOption.filter(color => color !== value)
             setColorOption(newArray)
         }
     }
 
     const addFilterOptions = (filterType, value) => {
-        if (filterType === 'category') {
+        if (filterType === constants.filterCategory) {
             if (value) {
                 setCategoryOption(value)
             } else {
                 setCategoryOption('')
             }
-        } else if (filterType === 'size') {
+        } else if (filterType === constants.filterSize) {
             if (!sizeOption.includes(value)) {
                 setSizeOption((sizeOption) => [...sizeOption, value]);
             }
-        } else if (filterType === 'color') {
+        } else if (filterType === constants.filterColor) {
             if (!colorOption.includes(value)) {
                 setColorOption((colorOption) => [...colorOption, value]);
             }
-        } else if (filterType === 'price') {
+        } else if (filterType === constants.filterPrice) {
             setPriceOption(value)
         }
     }
@@ -208,12 +205,12 @@ const Gallery = () => {
             <ProductContainer>
                 <ChosenOptions>
                     <p onClick={removeCategory}>{categoryOption}</p>
-                    <DisplayFilters removeFilter={removeFilter} filterType='size' options={sizeOption} />
-                    <DisplayFilters removeFilter={removeFilter} filterType='color' options={colorOption} />
+                    <DisplayFilters removeFilter={removeFilter} filterType={constants.filterSize} options={sizeOption} />
+                    <DisplayFilters removeFilter={removeFilter} filterType={constants.filterColor} options={colorOption} />
                     <SortButtons>
                         <p onClick={removePrice}>Sort by price</p>
-                        <button onClick={() => addFilterOptions('price', 'desc')}>Lower</button>
-                        <button onClick={() => addFilterOptions('price', 'asc')}>Higher</button>
+                        <button onClick={() => addFilterOptions(constants.filterPrice, 'desc')}>Lower</button>
+                        <button onClick={() => addFilterOptions(constants.filterPrice, 'asc')}>Higher</button>
                     </SortButtons>
                 </ChosenOptions>
                 <Products>
@@ -227,7 +224,7 @@ const Gallery = () => {
                 </Products>
                 <Pagination>
                     {products?.previous && (<Button onClick={(() => setCurrPage(currPage - 1))}>Previous</Button>)}
-                    <div className="flex">
+                    <div>
                         {Array(products?.pageCount).fill().map((_, index) => (
                             <PagButton onClick={(() => setCurrPage(index + 1))} currPage={currPage} index={index + 1} key={index}>{index + 1}</PagButton>
                         ))}

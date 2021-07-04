@@ -6,7 +6,7 @@ const Container = styled.div`
     width: 80%;
     min-height: 100vh;
     background-color: whitesmoke;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
 
     h2{
         padding: 1rem;
@@ -16,16 +16,14 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         width: 35%;
-        margin: 0 auto 0 auto;
+        margin: 0 auto;
     }
-
     form input{
         margin: 1rem;
         padding: 0.8rem;
         outline: none;
         border: none;
     }
-
     form button {
         padding: 0.8rem;
         width: 25%;

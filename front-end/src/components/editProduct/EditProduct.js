@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { productService } from '../../services/productServices';
@@ -7,7 +7,7 @@ const Container = styled.div`
     width: 80%;
     min-height: 100vh;
     background-color: whitesmoke;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
 
     h2{
         padding: 1rem;
@@ -17,16 +17,14 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         width: 35%;
-        margin: 0 auto 0 auto;
+        margin: 0 auto;
     }
-
     form input{
         margin: 1rem;
         padding: 0.8rem;
         outline: none;
         border: none;
     }
-
     form button {
         padding: 0.8rem;
         width: 25%;
@@ -35,7 +33,7 @@ const Container = styled.div`
         border: none;
         background-color: white;
         border-radius: 0.5rem;
-
+        
         :hover{
             background-color: #BBB;
             color: white;
@@ -44,8 +42,8 @@ const Container = styled.div`
 `;
 
 const AddProduct = (props) => {
-    const redirect = useHistory();
-    const productId = props.location.pathname.split('/')[2];
+    const history = useHistory();
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [size, setSize] = useState('');
@@ -54,12 +52,12 @@ const AddProduct = (props) => {
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
-        productService.getSingeProduct(productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
-    }, [productId])
+        productService.getSingeProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
+    }, [id])
 
     const editProduct = () => {
-        productService.editProduct(productId, title, category, size, color, price, imageUrl)
-        redirect.push('/')
+        productService.editProduct(id, title, category, size, color, price, imageUrl, history)
+        history.push('/')
     };
 
 

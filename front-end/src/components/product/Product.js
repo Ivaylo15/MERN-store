@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Container = styled.div`
-    /* width: 100%; */
     margin: 1rem;
     padding: 2rem 0 1rem 0;
     position: relative;
@@ -12,9 +11,8 @@ const Container = styled.div`
         z-index: 100;
         transform: scale(1.10);
     }
-
     img {
-        margin: 0 auto 0 auto;
+        margin: 0 auto;
         width: 250px;
     }
 `;

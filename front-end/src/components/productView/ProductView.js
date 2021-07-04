@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { productService } from '../../services/productServices';
 
@@ -10,14 +10,13 @@ const Container = styled.div`
     width: 80%;
     min-height: 100vh;
     background-color: whitesmoke;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
     .letf__container {
         p {
             margin-bottom: 1rem;
             color: #aaa;
             font-size: 20px;
-            font-weight: 500;
-            
+            font-weight: 500;      
         }
         img {
         width: 380px;
@@ -28,7 +27,7 @@ const Container = styled.div`
         margin-left: -10rem;
         h2 {
             font-weight: 600;
-            margin: 1rem 0 1rem 0;
+            margin: 1rem 0;
         }
         p {
             font-size: 20px;
@@ -56,12 +55,11 @@ const Container = styled.div`
             }
         }
     }
-    
 `;
 
-const ProductView = (props) => {
-    const redirect = useHistory();
-    const productId = props.location.pathname.split('/')[1];
+const ProductView = () => {
+    const history = useHistory();
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [size, setSize] = useState('');
@@ -70,12 +68,11 @@ const ProductView = (props) => {
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
-        productService.getSingeProduct(productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
-    }, [productId])
+        productService.getSingeProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
+    }, [id])
 
     const deleteProduct = () => {
-        productService.deleteProduct(productId, redirect);
-        redirect.push('/');
+        productService.deleteProduct(id, title, history);
     }
 
     return (
@@ -90,7 +87,7 @@ const ProductView = (props) => {
                 <p>color: {color}</p>
                 <p className="price">price: {price} $</p>
                 <div>
-                    <button onClick={() => {redirect.push(`/edit/${productId}`)}}>Edit</button>
+                    <button onClick={() => {history.push(`/edit/${id}`)}}>Edit</button>
                     <button onClick={deleteProduct}>Delete</button>
                 </div>
             </div>

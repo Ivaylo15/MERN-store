@@ -50,7 +50,7 @@ export const productService = {
             })
             .catch(err => alert(err.message));
     },
-    editProduct: (id, title, category, size, color, price, image, redirect) => {
+    editProduct: (id, title, category, size, color, price, image) => {
         axios.put(`${process.env.REACT_APP_BASE_URL}products`, {
             id,
             title,
@@ -61,14 +61,15 @@ export const productService = {
             image
         })
             .then(res => {
-                alert(messages.success);
+                alert(`${title} was edited`);
             })
             .catch(err => alert(err.message));
     },
-    deleteProduct: (productId, redirect) => {
+    deleteProduct: (productId, title, history) => {
         axios.delete(`${process.env.REACT_APP_BASE_URL}products/${productId}`)
             .then(res => {
-                alert(productId + 'deleted')
+                alert(`${title} was deleted`);
+                history.push('/');
             })
             .catch(err => alert(err.message));
     }
