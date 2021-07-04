@@ -17,7 +17,7 @@ export const productService = {
             })
             .catch(err => alert(err.message));
     },
-    getSingeProduct: (productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl) => {
+    getSingelProduct: (productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl) => {
         axios.get(`${process.env.REACT_APP_BASE_URL}product/${productId}`)
             .then(res => {
                 setTitle(res.data.title);
@@ -46,7 +46,7 @@ export const productService = {
             image
         })
             .then(res => {
-                alert(messages.success)
+                alert(`${title} was added`);
             })
             .catch(err => alert(err.message));
     },

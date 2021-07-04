@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const request = supertest(app);
 const Product = require('./models/Product');
+const statusCodes = require('./constants/status-codes');
 
 const products = [{
     title: 'Test',
@@ -43,7 +44,7 @@ afterAll(async () => {
 describe('Test Get products from database', () => {
     test('should return up to 12 products', async () => {
         const response = await request.get('/products')
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(statusCodes.OK)
         expect(response.body.results).toBeTruthy();
         expect(response.body.results.length).toBeLessThanOrEqual(12);
     })
@@ -59,7 +60,7 @@ describe('Test Post product to database', () => {
             price: 333,
             image: 'Test'
         })
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(statusCodes.OK)
         expect(response.headers['content-type']).toEqual(expect.stringContaining("json"));
     }),
         test('should return true value', async () => {
@@ -84,7 +85,7 @@ describe('Test Post product to database', () => {
                 category: 'Test',
                 size: 'xs',
                 color: 'Test',
-                price: 333,
+                price: 333.2,
                 image: 'Test'
             })
             expect(typeof response.body.title).toBe('string')
@@ -93,6 +94,25 @@ describe('Test Post product to database', () => {
             expect(typeof response.body.color).toBe('string')
             expect(typeof response.body.price).toBe('number')
             expect(typeof response.body.image).toBe('string')
+        }),
+        test('should fail with code 422, not all params available', async () => {
+            const response = await request.post('/products').send({
+                title: 'Test',
+                price: 333,
+                image: 'Test'
+            })
+            expect(response.status).toBe(statusCodes.UnprocessableEntity)
+        }),
+        test('should fail with code 422, price must be a positive number', async () => {
+            const response = await request.post('/products').send({
+                title: 'Test',
+                category: 'Test',
+                size: 'xs',
+                color: 'Test',
+                price: -1,
+                image: 'Test'
+            })
+            expect(response.status).toBe(statusCodes.UnprocessableEntity)
         })
 }, 1500)
 
@@ -100,10 +120,10 @@ describe('Test Delete products from database', () => {
     test('should return 200', async () => {
         const result = await Product.findOne();
         const response = await request.delete(`/products/${result._id}`)
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(statusCodes.OK)
     })
     test('should return error for invalid id', async () => {
         const response = await request.delete('/products/test')
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(statusCodes.InternalServerError)
     })
 }, 1500)

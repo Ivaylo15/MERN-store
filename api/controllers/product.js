@@ -17,7 +17,7 @@ module.exports = {
 
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
-            res.send(updatedProduct);
+            res.status(statusCodes.OK).send(updatedProduct);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
@@ -88,7 +88,7 @@ module.exports = {
         const category = req.query.category;
 
         const filterObject = {};
-        
+
         if (category) {
             filterObject.category = category;
         }
@@ -110,7 +110,7 @@ module.exports = {
                 filters.color = color;
             }
 
-            res.send(filters);
+            res.status(statusCodes.OK).send(filters);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }

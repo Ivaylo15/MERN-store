@@ -33,7 +33,6 @@ const Container = styled.div`
         border: none;
         background-color: white;
         border-radius: 0.5rem;
-        
         :hover{
             background-color: #BBB;
             color: white;
@@ -41,7 +40,7 @@ const Container = styled.div`
     }
 `;
 
-const AddProduct = (props) => {
+const EditProduct = (props) => {
     const history = useHistory();
     const { id } = useParams();
     const [title, setTitle] = useState('');
@@ -52,7 +51,7 @@ const AddProduct = (props) => {
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
-        productService.getSingeProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
+        productService.getSingelProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
     }, [id])
 
     const editProduct = () => {
@@ -63,7 +62,7 @@ const AddProduct = (props) => {
 
     return (
         <Container>
-            <h2>Add Product</h2>
+            <h2>Edit Product</h2>
             <form>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" />
                 <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="category" />
@@ -77,6 +76,6 @@ const AddProduct = (props) => {
     )
 }
 
-export default AddProduct;
+export default EditProduct;
 
 

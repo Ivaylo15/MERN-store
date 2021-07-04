@@ -34,6 +34,9 @@ exports.checkAddProduct =
             .withMessage(errorMessages.EmptyField)
             .isNumeric()
             .withMessage(errorMessages.FieldNumber)
+            .bail()
+            .isFloat({min: 0})
+            .withMessage(errorMessages.FieldNumber)
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
@@ -79,6 +82,9 @@ exports.checkEditProduct =
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
             .isNumeric()
+            .withMessage(errorMessages.FieldNumber)
+            .bail()
+            .isFloat({min: 0})
             .withMessage(errorMessages.FieldNumber)
             .bail(),
         (req, res, next) => {

@@ -68,7 +68,7 @@ const ProductView = () => {
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
-        productService.getSingeProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
+        productService.getSingelProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
     }, [id])
 
     const deleteProduct = () => {
