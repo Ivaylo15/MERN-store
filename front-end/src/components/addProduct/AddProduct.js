@@ -41,28 +41,28 @@ const Container = styled.div`
 `;
 
 const AddProduct = () => {
-    const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
-    const [size, setSize] = useState('');
-    const [color, setColor] = useState('');
-    const [price, setPrice] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
-    console.log(title)
+    const [title, setTitle] = useState(undefined);
+    const [category, setCategory] = useState(undefined);
+    const [size, setSize] = useState(undefined);
+    const [color, setColor] = useState(undefined);
+    const [price, setPrice] = useState(undefined);
+    const [imageUrl, setImageUrl] = useState(undefined);
+    console.log(title?.target?.value)
 
     const addProduct = () => {
-        productService.addProduct(title, category, size, color, price, imageUrl)
+        productService.addProduct(title?.target?.value, category?.target?.value, size?.target?.value, color?.target?.value, price?.target?.value, imageUrl?.target?.value)
     };
 
     return (
         <Container>
             <h2>Add Product</h2>
             <form>
-                <input type="text" value={title} onChange={setTitle} placeholder="title" />
-                <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="category" />
-                <input type="text" value={size} onChange={(e) => setSize(e.target.value)} placeholder="size" />
-                <input type="text" value={color} onChange={(e) => setColor(e.target.value)} placeholder="color" />
-                <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="price" />
-                <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="imageUrl" />
+                <input type="text" value={title?.target?.value} onChange={setTitle} placeholder="title" />
+                <input type="text" value={category?.target?.value} onChange={setCategory} placeholder="category" />
+                <input type="text" value={size?.target?.value} onChange={setSize} placeholder="size" />
+                <input type="text" value={color?.target?.value} onChange={setColor} placeholder="color" />
+                <input type="number" value={price?.target?.value} onChange={setPrice} placeholder="price" />
+                <input type="text" value={imageUrl?.target?.value} onChange={setImageUrl} placeholder="imageUrl" />
                 <button type="submit" onClick={addProduct}>Add Product</button>
             </form>
         </Container>

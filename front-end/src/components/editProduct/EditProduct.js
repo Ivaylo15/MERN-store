@@ -62,7 +62,7 @@ const EditProduct = (props) => {
 
     return (
         <Container>
-            <h2>Edit Product</h2>
+            <h2>Add Product</h2>
             <form>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" />
                 <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="category" />
