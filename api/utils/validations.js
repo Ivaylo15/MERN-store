@@ -27,13 +27,13 @@ exports.checkAddProduct =
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
             .bail(),
-        check('price')
+            check('price')
             .trim()
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isNumeric()
-            .withMessage(errorMessages.FieldNumber)
+            .isFloat({min: 0})
+            .withMessage(errorMessages.InvalidPriceField)
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
@@ -78,8 +78,8 @@ exports.checkEditProduct =
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isNumeric()
-            .withMessage(errorMessages.FieldNumber)
+            .isFloat({min: 0})
+            .withMessage(errorMessages.InvalidPriceField)
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);

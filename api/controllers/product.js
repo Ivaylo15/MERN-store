@@ -13,20 +13,20 @@ module.exports = {
         }
     },
     editProduct: async (req, res, next) => {
-        // const id = req.params.id;
         const { id, title, category, size, color, price, image } = req.body;
+
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
-            res.send(updatedProduct);
+            res.status(statusCodes.OK).send(updatedProduct);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
     },
     deleteProduct: async (req, res, next) => {
-        const { id } = req.body;
+        const productId = req.params.id;
 
         try {
-            const deletedProduct = await Product.deleteOne({ _id: id });
+            const deletedProduct = await Product.deleteOne({ _id: productId });
             res.send(deletedProduct);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
@@ -40,18 +40,20 @@ module.exports = {
         const size = req.query.size;
         const price = req.query.price;
 
-        let filterObject = {};
+        const filterObject = {};
+        const sortObject = {};
+
         if (category) {
             filterObject.category = category;
         }
         if (color) {
-            filterObject.color = color;
+            filterObject.color = { $in: color.split(',') };
         }
         if (size) {
-            filterObject.size = size;
+            filterObject.size = { $in: size.split(',') };
         }
         if (price) {
-            filterObject.price = { $lte: price };
+            sortObject.price = price;
         }
 
         const startIndex = (page - 1) * limit;
@@ -75,7 +77,7 @@ module.exports = {
 
         try {
             const rawResults = await Product.find(filterObject);
-            results.results = await Product.find(filterObject).limit(limit).skip(startIndex).exec();
+            results.results = await Product.find(filterObject).sort(sortObject).limit(limit).skip(startIndex).exec();
             results.pageCount = Math.ceil(rawResults.length / limit);
             res.status(statusCodes.OK).send(results)
         } catch (e) {
@@ -84,7 +86,9 @@ module.exports = {
     },
     filterOptions: async (req, res, next) => {
         const category = req.query.category;
-        let filterObject = {};
+
+        const filterObject = {};
+
         if (category) {
             filterObject.category = category;
         }
@@ -106,7 +110,7 @@ module.exports = {
                 filters.color = color;
             }
 
-            res.send(filters);
+            res.status(statusCodes.OK).send(filters);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }

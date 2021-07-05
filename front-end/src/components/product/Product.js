@@ -11,10 +11,10 @@ const Container = styled.div`
         z-index: 100;
         transform: scale(1.10);
     }
-`;
-
-const Image = styled.img`
-    width: 250px;
+    img {
+        margin: 0 auto;
+        width: 250px;
+    }
 `;
 
 const Category = styled.p`
@@ -26,6 +26,7 @@ const Category = styled.p`
 `;
 
 const Title = styled.h3`
+    width: 50;
     margin-top: 1rem;
     font-size: medium;
     font-weight: 400;
@@ -41,10 +42,10 @@ const Price = styled.p`
 const Product = ({ title, category, size, color, price, image }) => {
     return (
         <Container>
-            <Image loading='lazy' src={image} alt="product" />
+            <img loading='lazy' src={image} alt="product" />
             <div>
                 <Category>{category}</Category>
-                <Title>{title}</Title>
+                <Title>{`${title.slice(0, 20)}...`}</Title>
                 <Price>{price} $</Price>
             </div>
         </Container>

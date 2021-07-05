@@ -29,8 +29,8 @@ const Filter = ({ addFilterOptions, title, filterOptions }) => {
         <Container>
             <Title onClick={(() => addFilterOptions(title.toLowerCase(), null))}>{title}</Title>
             <div>
-                {filterOptions?.map(item => (
-                    <Link key={item} onClick={(() => addFilterOptions(title.toLowerCase(), item))}>{item}</Link>
+                {filterOptions?.map(option => (
+                    <Link key={option} onClick={(() => addFilterOptions(title.toLowerCase(), option))}>{option}</Link>
                 ))}
             </div>
         </Container>
