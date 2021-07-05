@@ -1,6 +1,13 @@
 import axios from 'axios';
+<<<<<<< Updated upstream
 import { constants } from '../constants/constants';
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
 import { messages } from '../constants/success-messages';
+=======
+import { constants } from '../constants/constants';
+>>>>>>> Stashed changes
 import { setFilters, setProduct } from '../redux/productSlice';
 import { utilFunc } from './utils';
 

@@ -1,5 +1,6 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 module.exports = (app) => {
     app.use(cors({
@@ -13,4 +14,5 @@ module.exports = (app) => {
 
     app.use(bodyParser.json());
     
+    app.use(cookieParser(process.env.COOKIE_SECRET));
 };
