@@ -41,28 +41,12 @@ const Container = styled.div`
 `;
 
 const AddProduct = () => {
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [size, setSize] = useState('');
     const [color, setColor] = useState('');
     const [price, setPrice] = useState('');
     const [imageUrl, setImageUrl] = useState('');
-=======
->>>>>>> Stashed changes
-    const [title, setTitle] = useState(undefined);
-    const [category, setCategory] = useState(undefined);
-    const [size, setSize] = useState(undefined);
-    const [color, setColor] = useState(undefined);
-    const [price, setPrice] = useState(undefined);
-    const [imageUrl, setImageUrl] = useState(undefined);
-<<<<<<< Updated upstream
-    console.log(title?.target?.value)
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
     const addProduct = () => {
         productService.addProduct(title?.target?.value, category?.target?.value, size?.target?.value, color?.target?.value, price?.target?.value, imageUrl?.target?.value)

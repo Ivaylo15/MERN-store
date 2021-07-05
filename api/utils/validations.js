@@ -27,26 +27,13 @@ exports.checkAddProduct =
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
             .bail(),
-        check('price')
+            check('price')
             .trim()
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isNumeric()
-<<<<<<< Updated upstream
-            .withMessage(errorMessages.FieldNumber)
-<<<<<<< Updated upstream
-            .bail()
-            .isFloat({min: 0})
-            .withMessage(errorMessages.FieldNumber)
-=======
-=======
-            .withMessage(errorMessages.InvalidPriceField)
-            .bail()
             .isFloat({min: 0})
             .withMessage(errorMessages.InvalidPriceField)
->>>>>>> Stashed changes
->>>>>>> Stashed changes
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
@@ -91,21 +78,8 @@ exports.checkEditProduct =
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isNumeric()
-<<<<<<< Updated upstream
-            .withMessage(errorMessages.FieldNumber)
-<<<<<<< Updated upstream
-            .bail()
-            .isFloat({min: 0})
-            .withMessage(errorMessages.FieldNumber)
-=======
-=======
-            .withMessage(errorMessages.InvalidPriceField)
-            .bail()
             .isFloat({min: 0})
             .withMessage(errorMessages.InvalidPriceField)
->>>>>>> Stashed changes
->>>>>>> Stashed changes
             .bail(),
         (req, res, next) => {
             const errors = validationResult(req);
