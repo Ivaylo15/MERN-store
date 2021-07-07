@@ -1,4 +1,4 @@
-const statusCodes = require('../constants/status-codes');
+const statusCodes = require('../constants/statusCodes');
 const Product = require('../models/Product');
 
 module.exports = {

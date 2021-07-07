@@ -5,13 +5,17 @@ import AddProduct from './components/addProduct/AddProduct';
 import ProductView from './components/productView/ProductView';
 import EditProduct from './components/editProduct/EditProduct';
 import LoginPage from './components/user/LoginPage';
+import ErrorLog from './components/errorPage/ErrorLog';
 import { useEffect } from 'react';
 import { userServices } from './services/userServices';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from './redux/userSlice';
 
 
 function App() {
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
 
   useEffect(() => {
     userServices.getAuthUser(dispatch);
@@ -23,7 +27,9 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/" component={Gallery}/>
-          <Route exact path="/signIn" component={LoginPage} />
+          {/* <Route exact path="/signIn" component={LoginPage} /> */}
+          <Route exact path="/signIn" render={(props) => user?.username ? <ErrorLog /> : <LoginPage {...props} />} />
+
           <Route exact path="/add" component={AddProduct}/>
           <Route exact path="/:id" component={ProductView}/>
           <Route exact path="/edit/:id" component={EditProduct} />

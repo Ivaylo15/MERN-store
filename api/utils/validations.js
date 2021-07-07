@@ -1,7 +1,7 @@
 const { check, validationResult } = require('express-validator');
-const { ValidationMinLength } = require('../constants/constant-values');
-const { UnprocessableEntity } = require('../constants/status-codes');
-const errorMessages = require('../constants/error-messages');
+const { ValidationMinLength } = require('../constants/constantValues');
+const { UnprocessableEntity } = require('../constants/statusCodes');
+const errorMessages = require('../constants/errorMessages');
 
 exports.checkAddProduct =
     [

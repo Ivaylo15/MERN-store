@@ -229,7 +229,7 @@ const Gallery = () => {
                             <PagButton onClick={(() => setCurrPage(index + 1))} currPage={currPage} index={index + 1} key={index}>{index + 1}</PagButton>
                         ))}
                     </div>
-                    {products?.results?.length >= constants.productCount && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
+                    {products.pageCount > currPage && (<Button onClick={(() => setCurrPage(currPage + 1))}>NEXT</Button>)}
                 </Pagination>
             </ProductContainer>
         </Container>
