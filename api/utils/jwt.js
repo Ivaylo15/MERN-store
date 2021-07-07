@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
-const secret = 'shhhhh';
+const constantValues = require('../constants/constantValues');
 
 const createToken = (data) => {
-    return jwt.sign(data, secret, { expiresIn: '1h' });
+    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: constantValues.ExpirationTimeToken });
 }
 
 const verifyToken = (token) => {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, secret, (err, data) => {
+        jwt.verify(token, process.env.TOKEN_SECRET, (err, data) => {
             if(err) { reject(err); return; }
             resolve(data);
         });

@@ -1,8 +1,8 @@
 const jwt = require('../utils/jwt');
 const User = require('../models/User');
 const TokenBlacklist = require('../models/TokenBlacklist');
-const statusCodes = require('../constants/status-codes');
-const errorMessages = require('../constants/error-messages');
+const statusCodes = require('../constants/statusCodes');
+const errorMessages = require('../constants/errorMessages');
 
 module.exports = {
     authUser: (req, res, next) => {
