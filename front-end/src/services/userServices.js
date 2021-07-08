@@ -1,4 +1,5 @@
 import axios from "axios"
+import { setInitialBasket, addToBasket, emptyBasket } from "../redux/basketSlice";
 import { setUser } from "../redux/userSlice";
 
 
@@ -20,6 +21,7 @@ export const userServices = {
         }, { withCredentials: true })
             .then(res => {
                 dispatch(setUser(res.data));
+                dispatch(setInitialBasket(res.data.basket));
                 alert(`Successfully signIn ${res.data.username}`)
                 history.push('/')
             })
@@ -28,6 +30,7 @@ export const userServices = {
     logout: (dispatch) => {
         axios.post(`${process.env.REACT_APP_BASE_URL}signOut`, {}, { withCredentials: true })
             .then(() => {
+                dispatch(emptyBasket());
                 dispatch(setUser({}))
                 alert(`Successfully loggedout`);
             })
@@ -36,8 +39,30 @@ export const userServices = {
     getAuthUser: (dispatch) => {
         axios.get(`${process.env.REACT_APP_BASE_URL}auth`, { withCredentials: true })
             .then((res) => {
-                dispatch(setUser(res.data))
+                dispatch(setUser(res.data));
+                dispatch(setInitialBasket(res.data.basket))
             })
+            .catch(err => alert(err.message));
+    },
+    addToBasket: (dispatch, userId, productsIds, productToBasket) => {
+        axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
+            userId,
+            productsIds
+        }, { withCredentials: true }
+        ).then((res) => {
+            alert('Product added to basket');
+            dispatch(addToBasket(productToBasket))
+        })
+            .catch(err => alert(err.message));
+    },
+    removeFromBasket: (userId, productsIds) => {
+        axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
+            userId,
+            productsIds
+        }, { withCredentials: true }
+        ).then((res) => {
+            alert('Product removed from basket');
+        })
             .catch(err => alert(err.message));
     }
 }

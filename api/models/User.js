@@ -4,7 +4,7 @@ const saltRounds = 10;
 
 const Schema = mongoose.Schema;
 const Model = mongoose.model;
-const { String } = Schema.Types;
+const { String, ObjectId } = Schema.Types;
 
 const userSchema = new Schema({
     username: {
@@ -15,7 +15,11 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    basket: [{
+        type: ObjectId,
+        ref: 'Product'
+    }]
 });
 
 

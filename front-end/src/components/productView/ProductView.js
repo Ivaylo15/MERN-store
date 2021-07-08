@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { selectBasketProducts, selectProductsIds } from '../../redux/basketSlice';
+import { selectUser } from '../../redux/userSlice';
 import { productService } from '../../services/productServices';
+import { userServices } from '../../services/userServices';
 
 const Container = styled.div`
     display: flex;
@@ -11,7 +15,7 @@ const Container = styled.div`
     min-height: 100vh;
     background-color: whitesmoke;
     margin: 0 auto;
-    .letf__container {
+    .letfContainer {
         p {
             margin-bottom: 1rem;
             color: #aaa;
@@ -22,7 +26,7 @@ const Container = styled.div`
         width: 380px;
         }
     }
-    .right__container {
+    .rightContainer {
         padding: 2rem;
         margin-left: -10rem;
         h2 {
@@ -58,6 +62,10 @@ const Container = styled.div`
 `;
 
 const ProductView = () => {
+    const dispatch = useDispatch();
+    const basketProducts = useSelector(selectBasketProducts);
+    const productsIds = useSelector(selectProductsIds);
+    const user = useSelector(selectUser);
     const history = useHistory();
     const { id } = useParams();
     const [title, setTitle] = useState('');
@@ -71,23 +79,37 @@ const ProductView = () => {
         productService.getSingelProduct(id, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl)
     }, [id])
 
+    const addToBasket = () => {
+        const productToBasket = {
+            _id: id, title, category, size, color, price, image: imageUrl
+        }
+        if (basketProducts.some(product => product._id === id)) {
+            alert('Allready in basket')
+        }
+        else {
+            productsIds.push(id);
+            userServices.addToBasket(dispatch, user?._id, productsIds, productToBasket);
+        }
+    }
+
     const deleteProduct = () => {
         productService.deleteProduct(id, title, history);
     }
 
     return (
         <Container>
-            <div className="letf__container">
+            <div className="letfContainer">
                 <p>{category}</p>
                 <img src={imageUrl} alt="product-img" />
             </div>
-            <div className="right__container">
+            <div className="rightContainer">
                 <h2>{title}</h2>
                 <p>size: {size}</p>
                 <p>color: {color}</p>
                 <p className="price">price: {price} $</p>
                 <div>
-                    <button onClick={() => {history.push(`/edit/${id}`)}}>Edit</button>
+                    <button onClick={addToBasket}>Add To Cart</button>
+                    <button onClick={() => { history.push(`/edit/${id}`) }}>Edit</button>
                     <button onClick={deleteProduct}>Delete</button>
                 </div>
             </div>
