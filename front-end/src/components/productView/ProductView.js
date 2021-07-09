@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { messages } from '../../constants/messages';
 import { selectBasketProducts, selectProductsIds } from '../../redux/basketSlice';
 import { selectUser } from '../../redux/userSlice';
 import { productService } from '../../services/productServices';
@@ -15,7 +16,7 @@ const Container = styled.div`
     min-height: 100vh;
     background-color: whitesmoke;
     margin: 0 auto;
-    .letfContainer {
+    .leftContainer {
         p {
             margin-bottom: 1rem;
             color: #aaa;
@@ -84,7 +85,7 @@ const ProductView = () => {
             _id: id, title, category, size, color, price, image: imageUrl
         }
         if (basketProducts.some(product => product._id === id)) {
-            alert('Allready in basket')
+            alert(messages.alreadyInBasket)
         }
         else {
             productsIds.push(id);
@@ -92,13 +93,21 @@ const ProductView = () => {
         }
     }
 
+    const redirectToEdit = () => {
+        history.push(`/edit/${id}`)
+    }
+
     const deleteProduct = () => {
-        productService.deleteProduct(id, title, history);
+        if(!!user){
+            productService.deleteProduct(id, title, history);
+        } else {
+            history.push(`/signIn`)
+        }
     }
 
     return (
         <Container>
-            <div className="letfContainer">
+            <div className="leftContainer">
                 <p>{category}</p>
                 <img src={imageUrl} alt="product-img" />
             </div>
@@ -109,7 +118,7 @@ const ProductView = () => {
                 <p className="price">price: {price} $</p>
                 <div>
                     <button onClick={addToBasket}>Add To Cart</button>
-                    <button onClick={() => { history.push(`/edit/${id}`) }}>Edit</button>
+                    <button onClick={redirectToEdit}>Edit</button>
                     <button onClick={deleteProduct}>Delete</button>
                 </div>
             </div>

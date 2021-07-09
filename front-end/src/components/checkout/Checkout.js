@@ -59,10 +59,7 @@ const RightContainer = styled.div`
     padding: 3rem;
 `;
 
-
-
 const Checkout = () => {
-    const user = useSelector(selectUser);
     const basketProducts = useSelector(selectBasketProducts);
     const total = useSelector(selectTotal);
 
@@ -76,7 +73,7 @@ const Checkout = () => {
             <RightContainer>
                 {basketProducts.length && (
                     <>
-                        <h2>Subtotal ({user.basket.length} items): {' '}</h2>
+                        <h2>Subtotal ({basketProducts.length} items): {' '}</h2>
                         <span>
                             <Currency quantity={total} currency="USD" />
                         </span>

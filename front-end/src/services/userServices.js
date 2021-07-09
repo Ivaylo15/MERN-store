@@ -1,7 +1,7 @@
 import axios from "axios"
+import { messages } from "../constants/messages";
 import { setInitialBasket, addToBasket, emptyBasket } from "../redux/basketSlice";
 import { setUser } from "../redux/userSlice";
-
 
 export const userServices = {
     register: (username, password) => {
@@ -10,7 +10,7 @@ export const userServices = {
             password
         })
             .then(res => {
-                alert(`Signed Up with ${username}. You can signIn!!!`)
+                alert(messages.signedUp)
             })
             .catch(err => alert(err.message));
     },
@@ -22,7 +22,7 @@ export const userServices = {
             .then(res => {
                 dispatch(setUser(res.data));
                 dispatch(setInitialBasket(res.data.basket));
-                alert(`Successfully signIn ${res.data.username}`)
+                alert(messages.signedIn)
                 history.push('/')
             })
             .catch(err => alert(err.message));
@@ -31,8 +31,8 @@ export const userServices = {
         axios.post(`${process.env.REACT_APP_BASE_URL}signOut`, {}, { withCredentials: true })
             .then(() => {
                 dispatch(emptyBasket());
-                dispatch(setUser({}))
-                alert(`Successfully loggedout`);
+                dispatch(setUser())
+                alert(messages.signedOut);
             })
             .catch(err => alert(err.message));
     },
@@ -50,7 +50,7 @@ export const userServices = {
             productsIds
         }, { withCredentials: true }
         ).then((res) => {
-            alert('Product added to basket');
+            alert(messages.addToBasket);
             dispatch(addToBasket(productToBasket))
         })
             .catch(err => alert(err.message));
@@ -61,7 +61,7 @@ export const userServices = {
             productsIds
         }, { withCredentials: true }
         ).then((res) => {
-            alert('Product removed from basket');
+            alert(messages.removeFromBasket);
         })
             .catch(err => alert(err.message));
     }

@@ -5,7 +5,6 @@ import { removeFromBasket, selectProductsIds } from '../../redux/basketSlice';
 import { userServices } from '../../services/userServices';
 import { selectUser } from '../../redux/userSlice';
 
-
 const Container = styled.div`
     width: 65%;
     padding: 2rem;
@@ -42,11 +41,13 @@ const CheckoutProduct = ({ id, image, title, size, color, price }) => {
     const removeProduct = () => {
         dispatch(removeFromBasket({ id }));
         productsIds.splice(productsIds.indexOf(id), 1);
-        userServices.removeFromBasket(user._id, productsIds);
+        if(!!user){
+            userServices.removeFromBasket(user._id, productsIds);
+        }
     }
 
     return (
-        <Container key={id} className="productInfo">
+        <Container className="productInfo">
             <img src={image} alt="product-img" />
             <div>
                 <h3>{title}</h3>
