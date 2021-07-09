@@ -13,12 +13,11 @@ import { selectUser } from './redux/userSlice';
 import Checkout from './components/checkout/Checkout';
 import Auth from './Auth';
 import { useCookies } from 'react-cookie';
-import { setInitialBasket } from './redux/basketSlice';
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const [cookies] = useCookies([user?._id]);
+  const [cookies] = useCookies();
 
   useEffect(() => {
     userServices.getAuthUser(dispatch, cookies);
@@ -34,6 +33,7 @@ function App() {
             <Gallery />
           </Route>
           <Route exact path="/signIn" render={(props) => user?.username ? <ErrorLog /> : <LoginPage {...props} />} />
+          {/* <Route exact path="/signIn" component={LoginPage} /> */}
           <Route exact path="/checkout" component={Checkout} />
           <Auth exact path="/add" component={AddProduct} />
           <Auth exact path="/edit/:id" component={EditProduct} />
