@@ -27,12 +27,13 @@ export const userServices = {
             })
             .catch(err => alert(err.message));
     },
-    logout: (dispatch) => {
+    logout: (dispatch, history) => {
         axios.post(`${process.env.REACT_APP_BASE_URL}signOut`, {}, { withCredentials: true })
             .then(() => {
                 dispatch(emptyBasket());
                 dispatch(setUser())
                 alert(messages.signedOut);
+                history.push('/')
             })
             .catch(err => alert(err.message));
     },

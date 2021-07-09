@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../redux/userSlice';
 import { userServices } from '../../services/userServices';
@@ -66,12 +66,13 @@ const LinkStyle = styled.div`
 `
 
 const Header = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const basket = useSelector(selectBasketProducts);
 
     const signOut = () => {
-        userServices.logout(dispatch);
+        userServices.logout(dispatch, history);
     }
 
     return (

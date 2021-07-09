@@ -1,14 +1,15 @@
 import { Route, Redirect } from 'react-router-dom';
 import { useCookies } from "react-cookie";
+import { constants } from './constants/constants';
 
 const Auth = ({ component: Component, ...rest }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(['x-auth-token']);
-
+    const [cookies, setCookie, removeCookie] = useCookies([constants.cookieName]);
+    
     return (
         <Route
             {...rest}
             render={props =>
-                !!cookies['x-auth-token'] ? (<Component {...props} />
+                !!cookies[constants.cookieName] ? (<Component {...props} />
                 ) : (
                     <Redirect
                         to={{
