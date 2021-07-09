@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -63,10 +64,10 @@ const Container = styled.div`
 `;
 
 const ProductView = () => {
+    const user = useSelector(selectUser);
+    const [cookies, setCookie, removeCookie] = useCookies([user?._id]);
     const dispatch = useDispatch();
     const basketProducts = useSelector(selectBasketProducts);
-    const productsIds = useSelector(selectProductsIds);
-    const user = useSelector(selectUser);
     const history = useHistory();
     const { id } = useParams();
     const [title, setTitle] = useState('');
@@ -88,8 +89,7 @@ const ProductView = () => {
             alert(messages.alreadyInBasket)
         }
         else {
-            productsIds.push(id);
-            userServices.addToBasket(dispatch, user?._id, productsIds, productToBasket);
+            userServices.addToBasket(dispatch, user?._id, productToBasket, setCookie, basketProducts);
         }
     }
 
@@ -98,7 +98,7 @@ const ProductView = () => {
     }
 
     const deleteProduct = () => {
-        if(!!user){
+        if (!!user) {
             productService.deleteProduct(id, title, history);
         } else {
             history.push(`/signIn`)

@@ -8,7 +8,7 @@ module.exports = {
     authUser: (req, res, next) => {
         const token = req.cookies[process.env.COOKIE_NAME];
         jwt.verifyToken(token)
-            .then(({ id }) => User.findById(id).populate('basket')
+            .then(({ id }) => User.findById(id)
                 .then(user => res.send(user))
                 .catch((e) => res.status(401).send(e.message))
             )
@@ -28,7 +28,7 @@ module.exports = {
         const { username, password } = req.body;
 
         try {
-            const user = await User.findOne({ username }).populate('basket');
+            const user = await User.findOne({ username })
             Promise.all([user, user.matchPassword(password)])
                 .then(([user, match]) => {
                     if (!match) {
@@ -53,14 +53,14 @@ module.exports = {
             next();
         }
     },
-    addToBasket: async (req, res, next) => {
-        const { userId, productsIds } = req.body;
-        try {
-            const updatedUser = await User.updateOne({ _id: userId }, { basket: productsIds });
-            res.status(statusCodes.OK).send(updatedUser);
-        } catch (e) {
-            res.status(statusCodes.InternalServerError).json({ message: e.message });
-            next();
-        }
-    }
+    // addToBasket: async (req, res, next) => {
+    //     const { userId, productsIds } = req.body;
+    //     try {
+    //         const updatedUser = await User.updateOne({ _id: userId }, { basket: productsIds });
+    //         res.status(statusCodes.OK).send(updatedUser);
+    //     } catch (e) {
+    //         res.status(statusCodes.InternalServerError).json({ message: e.message });
+    //         next();
+    //     }
+    // }
 }

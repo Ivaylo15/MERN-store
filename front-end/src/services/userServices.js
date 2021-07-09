@@ -14,14 +14,14 @@ export const userServices = {
             })
             .catch(err => alert(err.message));
     },
-    login: (dispatch, username, password, history) => {
+    login: (dispatch, username, password, history, cookies) => {
         axios.post(`${process.env.REACT_APP_BASE_URL}signIn`, {
             username,
             password
         }, { withCredentials: true })
             .then(res => {
                 dispatch(setUser(res.data));
-                dispatch(setInitialBasket(res.data.basket));
+                dispatch(setInitialBasket(cookies[res.data._id]));
                 alert(messages.signedIn)
                 history.push('/')
             })
@@ -37,33 +37,39 @@ export const userServices = {
             })
             .catch(err => alert(err.message));
     },
-    getAuthUser: (dispatch) => {
+    getAuthUser: (dispatch, cookies) => {
         axios.get(`${process.env.REACT_APP_BASE_URL}auth`, { withCredentials: true })
             .then((res) => {
                 dispatch(setUser(res.data));
-                dispatch(setInitialBasket(res.data.basket))
+                dispatch(setInitialBasket(cookies[res.data._id]))
             })
             .catch(err => alert(err.message));
     },
-    addToBasket: (dispatch, userId, productsIds, productToBasket) => {
-        axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
-            userId,
-            productsIds
-        }, { withCredentials: true }
-        ).then((res) => {
-            alert(messages.addToBasket);
-            dispatch(addToBasket(productToBasket))
-        })
-            .catch(err => alert(err.message));
+    addToBasket: (dispatch, userId, productToBasket, setCookie, basketProducts) => {
+        dispatch(addToBasket(productToBasket))
+        alert(messages.addToBasket);
+        setCookie(userId, [...basketProducts, productToBasket], { path: '/' })
+
+        // axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
+        //     userId,
+        //     productsIds
+        // }, { withCredentials: true }
+        // ).then((res) => {
+        //     alert(messages.addToBasket);
+        //     dispatch(addToBasket(productToBasket))
+        // })
+        //     .catch(err => alert(err.message));
     },
-    removeFromBasket: (userId, productsIds) => {
-        axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
-            userId,
-            productsIds
-        }, { withCredentials: true }
-        ).then((res) => {
-            alert(messages.removeFromBasket);
-        })
-            .catch(err => alert(err.message));
+    removeFromBasket: (userId, productsInBasket, setCookie) => {
+        setCookie(userId, productsInBasket, { path: '/'});
+
+        // axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
+        //     userId,
+        //     productsIds
+        // }, { withCredentials: true }
+        // ).then((res) => {
+        //     alert(messages.removeFromBasket);
+        // })
+        //     .catch(err => alert(err.message));
     }
 }

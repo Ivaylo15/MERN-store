@@ -66,10 +66,10 @@ const LinkStyle = styled.div`
 `
 
 const Header = () => {
-    const history = useHistory();
-    const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const basket = useSelector(selectBasketProducts);
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     const signOut = () => {
         userServices.logout(dispatch, history);

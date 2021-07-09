@@ -51,7 +51,6 @@ const ChosenOptions = styled.div`
     p:hover {
         color: red;
     }
-   
 `;
 
 const SortButtons = styled.div`
@@ -98,7 +97,6 @@ const PagButton = styled.button`
     background-color: ${prop => prop.currPage === prop.index ? "gray" : "white"};
     border: 1px solid #CCC;
 `;
-
 
 const Gallery = () => {
     const dispatch = useDispatch();

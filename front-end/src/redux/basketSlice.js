@@ -8,6 +8,9 @@ export const basketSlice = createSlice({
     reducers: {
         setInitialBasket: (state, action) => {
             state.products = [...state.products, ...action.payload]
+            console.warn(
+                `${action.payload}`
+            )
         },
         addToBasket: (state, action) => {
             state.products = [...state.products, action.payload]
@@ -36,6 +39,6 @@ export const { setInitialBasket, addToBasket, emptyBasket, removeFromBasket } = 
 
 export const selectBasketProducts = (state) => state.basket.products;
 export const selectTotal = (state) => state.basket.products.reduce((total, item) => total + item.price, 0);
-export const selectProductsIds = (state) => state.basket.products.map((product => product._id))
+// export const selectProductsIds = (state) => state.basket.products.map((product => product._id))
 
 export default basketSlice.reducer;

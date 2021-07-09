@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import Currency from "react-currency-formatter";
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromBasket, selectProductsIds } from '../../redux/basketSlice';
+import { removeFromBasket, selectBasketProducts } from '../../redux/basketSlice';
 import { userServices } from '../../services/userServices';
 import { selectUser } from '../../redux/userSlice';
+import { useCookies } from 'react-cookie';
 
 const Container = styled.div`
     width: 65%;
@@ -36,13 +37,14 @@ const Container = styled.div`
 const CheckoutProduct = ({ id, image, title, size, color, price }) => {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const productsIds = useSelector(selectProductsIds);
+    const [cookies, setCookie, removeCookie] = useCookies([user?._id]);
+    const productsInBasket = useSelector(selectBasketProducts);
 
     const removeProduct = () => {
         dispatch(removeFromBasket({ id }));
-        productsIds.splice(productsIds.indexOf(id), 1);
+        const filteredProducts = productsInBasket.filter((product) => product._id !== id);
         if(!!user){
-            userServices.removeFromBasket(user._id, productsIds);
+            userServices.removeFromBasket(user?._id, filteredProducts, setCookie);
         }
     }
 

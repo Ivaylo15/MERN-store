@@ -3,8 +3,8 @@ import { useCookies } from "react-cookie";
 import { constants } from './constants/constants';
 
 const Auth = ({ component: Component, ...rest }) => {
-    const [cookies, setCookie, removeCookie] = useCookies([constants.cookieName]);
-    
+    const [cookies] = useCookies([constants.cookieName]);
+
     return (
         <Route
             {...rest}
