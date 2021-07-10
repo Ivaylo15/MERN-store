@@ -16,10 +16,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    // basket: [{
-    //     type: ObjectId,
-    //     ref: 'Product'
-    // }]
 });
 
 

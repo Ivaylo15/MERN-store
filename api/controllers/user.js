@@ -53,14 +53,4 @@ module.exports = {
             next();
         }
     },
-    // addToBasket: async (req, res, next) => {
-    //     const { userId, productsIds } = req.body;
-    //     try {
-    //         const updatedUser = await User.updateOne({ _id: userId }, { basket: productsIds });
-    //         res.status(statusCodes.OK).send(updatedUser);
-    //     } catch (e) {
-    //         res.status(statusCodes.InternalServerError).json({ message: e.message });
-    //         next();
-    //     }
-    // }
 }

@@ -9,8 +9,5 @@ router.post('/signIn', user.login);
 
 router.post('/signOut', user.logout);
 
-// router.put('/addToBasket', user.addToBasket);
-
-
 module.exports = router;
 
