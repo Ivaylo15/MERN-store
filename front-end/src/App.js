@@ -14,6 +14,7 @@ import Checkout from './components/checkout/Checkout';
 import Auth from './Auth';
 import { useCookies } from 'react-cookie';
 
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);

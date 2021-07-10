@@ -1,8 +1,14 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Currency from "react-currency-formatter";
-import { selectBasketProducts, selectTotal } from '../../redux/basketSlice';
+import { emptyBasket, selectBasketProducts, selectTotal } from '../../redux/basketSlice';
 import CheckoutProduct from './CheckoutProduct';
+import ReactDOM from "react-dom";
+import React from "react";
+import { useCookies } from 'react-cookie';
+import { selectUser } from '../../redux/userSlice';
+
+const PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
 
 const Container = styled.div`
     display: flex;
@@ -58,15 +64,42 @@ const RightContainer = styled.div`
     padding: 3rem;
 `;
 
+
+
 const Checkout = () => {
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
     const basketProducts = useSelector(selectBasketProducts);
     const total = useSelector(selectTotal);
+    const [cookies, setCookie, removeCookie] = useCookies();
+
+
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: total,
+                    },
+                },
+            ],
+        });
+    };
+
+    const onApprove = (data, actions) => {
+        if(!!user._id){
+            removeCookie(user._id)
+        }
+        dispatch(emptyBasket());
+        return actions.order.capture();
+    };
+
 
     return (
         <Container>
             <LeftContainer>
                 {basketProducts?.map((product) => (
-                    <CheckoutProduct key={product._id} id={product._id} title={product.title} category={product.category} size={product.size} color={product.color} price={product.price} image={product.image}/>
+                    <CheckoutProduct key={product._id} id={product._id} title={product.title} category={product.category} size={product.size} color={product.color} price={product.price} image={product.image} />
                 ))}
             </LeftContainer>
             <RightContainer>
@@ -78,6 +111,10 @@ const Checkout = () => {
                         </span>
                     </>
                 )}
+                <PayPalButton
+                    createOrder={(data, actions) => createOrder(data, actions)}
+                    onApprove={(data, actions) => onApprove(data, actions)}
+                />
             </RightContainer>
         </Container>
     )
