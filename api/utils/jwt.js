@@ -8,7 +8,7 @@ const createToken = (data) => {
 const verifyToken = (token) => {
     return new Promise((resolve, reject) => {
         jwt.verify(token, process.env.TOKEN_SECRET, (err, data) => {
-            if(err) { reject(err); return; }
+            if(err) return reject(err);
             resolve(data);
         });
     });

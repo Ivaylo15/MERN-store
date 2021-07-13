@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -49,6 +50,7 @@ const Container = styled.div`
 
 const LoginPage = () => {
     const dispatch = useDispatch();
+    const [cookies] = useCookies();
     const history = useHistory();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -60,7 +62,7 @@ const LoginPage = () => {
 
     const signIn = (e) => {
         e.preventDefault();
-        userServices.login(dispatch, username, password, history);
+        userServices.login(dispatch, username, password, history, cookies);
     }
 
     return (

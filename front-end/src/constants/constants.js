@@ -4,4 +4,5 @@ export const constants = {
     filterSize: 'size',
     filterColor: 'color',
     filterPrice: 'price',
+    cookieName: 'x-auth-token'
 }

@@ -28,7 +28,7 @@ module.exports = {
         const { username, password } = req.body;
 
         try {
-            const user = await User.findOne({ username });
+            const user = await User.findOne({ username })
             Promise.all([user, user.matchPassword(password)])
                 .then(([user, match]) => {
                     if (!match) {
@@ -52,5 +52,5 @@ module.exports = {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
             next();
         }
-    }
+    },
 }
