@@ -21,7 +21,10 @@ module.exports = {
 
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
+
+            redisClient.del(`product:${id}`)
             res.status(statusCodes.OK).send(updatedProduct);
+
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
@@ -151,16 +154,13 @@ module.exports = {
             redisClient.get(`product:${productId}`, async (error, product) => {
                 if (error) console.log(error);
                 if (product !== null) {
-                    if (JSON.stringify(productData) === product) {
-                        return res.json(JSON.parse(product));
-                    } else {
-                        redisClient.setex(key, constantValues.RedisExpirationTime, JSON.stringify(productData));
-                    }
+                    return res.json(JSON.parse(product));
+
                 } else {
-                    redisClient.setex(key, constantValues.RedisExpirationTime, JSON.stringify(productData));
+                    redisClient.setex(`product:${productId}`, constantValues.RedisExpirationTime, JSON.stringify(productData));
+                    res.status(statusCodes.OK).send(productData);
                 }
             })
-            res.status(statusCodes.OK).send(productData);
         } catch (e) {
             res.status(statusCodes.InternalServerError).json({ message: e.message });
         }
