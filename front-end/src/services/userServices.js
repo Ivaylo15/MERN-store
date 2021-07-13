@@ -21,7 +21,7 @@ export const userServices = {
         }, { withCredentials: true })
             .then(res => {
                 dispatch(setUser(res.data));
-                if (!!cookies[res.data._id]) {
+                if (cookies[res.data._id]) {
                     dispatch(setInitialBasket(cookies[res.data._id]));
                 }
                 alert(messages.signedIn)
@@ -53,27 +53,8 @@ export const userServices = {
         dispatch(addToBasket(productToBasket))
         alert(messages.addToBasket);
         setCookie(userId, [...basketProducts, productToBasket], { path: '/' })
-
-        // axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
-        //     userId,
-        //     productsIds
-        // }, { withCredentials: true }
-        // ).then((res) => {
-        //     alert(messages.addToBasket);
-        //     dispatch(addToBasket(productToBasket))
-        // })
-        //     .catch(err => alert(err.message));
     },
     removeFromBasket: (userId, productsInBasket, setCookie) => {
         setCookie(userId, productsInBasket, { path: '/' });
-
-        // axios.put(`${process.env.REACT_APP_BASE_URL}addToBasket`, {
-        //     userId,
-        //     productsIds
-        // }, { withCredentials: true }
-        // ).then((res) => {
-        //     alert(messages.removeFromBasket);
-        // })
-        //     .catch(err => alert(err.message));
     }
 }

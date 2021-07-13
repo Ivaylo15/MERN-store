@@ -13,11 +13,15 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    a{
+        text-decoration: none;
+    }
 `
 const LeftContainer = styled.div`
     display: flex;
     align-items: center;
     margin-left: 2rem;
+   
     p{
         cursor: pointer;
         :hover {
@@ -78,12 +82,12 @@ const Header = () => {
     return (
         <Container>
             <LeftContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
+                <Link to="/">
                     <LinkStyle>
                         Gallery
                     </LinkStyle>
                 </Link>
-                <Link to="/add" style={{ textDecoration: 'none' }}>
+                <Link to="/add">
                     <LinkStyle>
                         Add Product
                     </LinkStyle>
@@ -94,14 +98,14 @@ const Header = () => {
                     (
                         <p onClick={signOut}>{user.username}</p>
                     ) : (
-                        <Link to="/signIn" style={{ textDecoration: 'none' }}>
+                        <Link to="/signIn">
                             <LinkStyle>
                                 SignIn
                             </LinkStyle>
                         </Link>
                     )
                 }
-                <Link to="/checkout" style={{ textDecoration: 'none' }}>
+                <Link to="/checkout">
                     <LinkStyle>
                         <span>{basket.length}</span>
                         <ShoppingCartIcon className="basket" />

@@ -87,7 +87,7 @@ const Checkout = () => {
     };
 
     const onApprove = (data, actions) => {
-        if(!!user._id){
+        if(user._id){
             removeCookie(user._id)
         }
         dispatch(emptyBasket());
