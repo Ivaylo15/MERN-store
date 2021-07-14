@@ -7,6 +7,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import { useCookies } from 'react-cookie';
 import { selectUser } from '../../redux/userSlice';
+import { orderService } from '../../services/orderServices';
 
 const PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
 
@@ -88,6 +89,7 @@ const Checkout = () => {
 
     const onApprove = (data, actions) => {
         if(user._id){
+            orderService.createOrder(user._id, basketProducts, total);
             removeCookie(user._id)
         }
         dispatch(emptyBasket());
