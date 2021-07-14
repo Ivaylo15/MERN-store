@@ -19,16 +19,7 @@ module.exports = {
     },
     ordersForUser: async (req, res, next) => {
         const userId = req.params.id;
-
-        // try {
-        //     const orders = await Order.find({ user: userId }).populate('products')
-        //     console.log(orders.products)
-        //     res.status(statusCodes.OK).send(orders);
-
-        // } catch (e) {
-        //     res.json({ message: e.message });
-        //     next();
-        // }
+        
         Order.find({ user: userId }).populate('products')
             .then((orders) => res.send(orders))
             .catch(next);

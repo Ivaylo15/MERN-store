@@ -19,7 +19,6 @@ const UserOrders = () => {
     const user = useSelector(selectUser);
     const [orders, setOrders] = useState([]);
 
-    console.log(orders)
     useEffect(() => {
         if (user?._id) {
             orderService.ordersForUser(user._id, setOrders)
