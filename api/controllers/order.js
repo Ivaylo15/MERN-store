@@ -8,7 +8,7 @@ module.exports = {
         const { userId, orderItems, price } = req.body;
 
         try {
-            createdOrder = await Order.create({ user: userId, products: orderItems, price });
+            createdOrder = await Order.create({ user: userId, products: orderItems, price, date: new Date()});
             updatedUser = await User.updateOne({ _id: userId }, { $push: { orders: createdOrder } })
             res.status(statusCodes.OK).send(updatedUser);
 

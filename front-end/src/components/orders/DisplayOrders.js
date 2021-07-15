@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import moment from 'moment';
 
 const Container = styled.div`
     border-bottom: 1px solid #ccc;
@@ -12,6 +13,12 @@ const OrderInfo = styled.div`
     display: flex;
     justify-content: space-between;
 
+    .date{
+        margin: 0 0 2rem 1rem;
+        font-size: 14px;
+        font-weight: 600;
+        
+    }
     .totalPrice{
         font-size: 30px;
         font-weight: bold;
@@ -46,9 +53,12 @@ const ProductMap = styled.div`
             font-weight: 500;
         }
     }
+    
+    
 `;
 
-const DisplayOrders = ({ id, products, price }) => {
+const DisplayOrders = ({ id, products, price, date }) => {
+    const formatDate = moment(date).format('MMMM Do YYYY, h:mm:ss a')
     return (
         <Container>
             <h3>Order: {id}</h3>
@@ -62,13 +72,14 @@ const DisplayOrders = ({ id, products, price }) => {
                                 <p>size: {product.size}</p>
                                 <p>color: {product.color}</p>
                             </div>
-                            <p className="price">{product.price}$</p>
+                            <p className="price">${product.price}</p>
                         </div>
                     </ProductMap>
                 ))}
                 </div>
                 <div>
-                    <p className="totalPrice">Total Price: {price}$</p>
+                    <p className="date">Created on: {formatDate}</p>
+                    <p className="totalPrice">Total Price: ${price}</p>
                 </div>
             </OrderInfo>
         </Container>

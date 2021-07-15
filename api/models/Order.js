@@ -17,6 +17,9 @@ const orderSchema = Schema({
     price: {
         type: String,
         required: true
+    },
+    date: {
+        type: String,
     }
 })
 

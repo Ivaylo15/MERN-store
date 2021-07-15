@@ -29,7 +29,7 @@ const UserOrders = () => {
         <Container>
             <h1>Orders</h1>
             {orders?.map(order => (
-                <DisplayOrders key={order._id} id={order._id} products={order.products} price={order.price} />
+                <DisplayOrders key={order._id} id={order._id} products={order.products} price={order.price} date={order.date || 'no date'} />
             ))}
         </Container>
     )
