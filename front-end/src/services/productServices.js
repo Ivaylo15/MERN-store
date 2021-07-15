@@ -17,7 +17,7 @@ export const productService = {
             .catch(err => alert(err.message));
     },
     getSingelProduct: (productId, setTitle, setCategory, setSize, setColor, setPrice, setImageUrl) => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}product/${productId}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}products/${productId}`)
             .then(res => {
                 setTitle(res.data.title);
                 setCategory(res.data.category);
@@ -29,7 +29,7 @@ export const productService = {
             .catch(err => alert(err.message));
     },
     getFilters: (dispatch) => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}productsFilters`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}products/filters`)
             .then(res => {
                 dispatch(setFilters(res.data));
             })

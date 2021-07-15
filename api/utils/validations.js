@@ -27,12 +27,12 @@ exports.checkAddProduct =
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
             .bail(),
-            check('price')
+        check('price')
             .trim()
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isFloat({min: 0})
+            .isFloat({ min: 0 })
             .withMessage(errorMessages.InvalidPriceField)
             .bail(),
         (req, res, next) => {
@@ -78,7 +78,7 @@ exports.checkEditProduct =
             .not()
             .isEmpty()
             .withMessage(errorMessages.EmptyField)
-            .isFloat({min: 0})
+            .isFloat({ min: 0 })
             .withMessage(errorMessages.InvalidPriceField)
             .bail(),
         (req, res, next) => {
@@ -88,3 +88,27 @@ exports.checkEditProduct =
             next();
         }
     ]
+
+exports.checkOrder = [
+    check('userId')
+        .not()
+        .isEmpty()
+        .withMessage(errorMessages.EmptyField)
+        .bail(),
+    check('orderItems')
+        .not()
+        .isEmpty()
+        .withMessage(errorMessages.EmptyField)
+        .bail(),
+    check('price')
+        .not()
+        .isEmpty()
+        .withMessage(errorMessages.EmptyField)
+        .bail(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.status(UnprocessableEntity).json({ errors: errors.array() });
+        next();
+    }
+]

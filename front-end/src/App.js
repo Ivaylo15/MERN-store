@@ -13,6 +13,7 @@ import { selectUser } from './redux/userSlice';
 import Checkout from './components/checkout/Checkout';
 import Auth from './Auth';
 import { useCookies } from 'react-cookie';
+import UserOrders from './components/orders/UserOrders';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Gallery />
           </Route>
           <Route exact path="/signIn" render={(props) => user?.username ? <ErrorLog /> : <LoginPage {...props} />} />
+          <Auth exact path="/orders" component={UserOrders} />
           <Route exact path="/checkout" component={Checkout} />
           <Auth exact path="/add" component={AddProduct} />
           <Auth exact path="/edit/:id" component={EditProduct} />

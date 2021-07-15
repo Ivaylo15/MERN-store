@@ -13,6 +13,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    font-weight: 600;
     a{
         text-decoration: none;
     }
@@ -96,7 +97,14 @@ const Header = () => {
             <RightContainer>
                 {user?.username ?
                     (
-                        <p onClick={signOut}>{user.username}</p>
+                        <>
+                            <Link to="/orders">
+                                <LinkStyle>
+                                    Orders
+                                </LinkStyle>
+                            </Link>
+                            <p onClick={signOut}>{user.username}</p>
+                        </>
                     ) : (
                         <Link to="/signIn">
                             <LinkStyle>
