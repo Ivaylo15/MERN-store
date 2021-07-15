@@ -8,8 +8,18 @@ const Container = styled.div`
     }
 `;
 
-const ProductsContainer = styled.div`
-    
+const OrderInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+
+    .totalPrice{
+        font-size: 30px;
+        font-weight: bold;
+        margin-right: 2rem;
+        background-color: orange;
+        padding: 2rem;
+        border-radius: 1rem;
+    }
 `;
 
 const ProductMap = styled.div`
@@ -42,20 +52,25 @@ const DisplayOrders = ({ id, products, price }) => {
     return (
         <Container>
             <h3>Order: {id}</h3>
-            <ProductsContainer>{products.map(product => (
-                <ProductMap key={product._id}>
-                    <img src={product.image} alt="product-img" />
-                    <div>
-                        <h4>{product.title}</h4>
+            <OrderInfo>
+                <div>{products.map(product => (
+                    <ProductMap key={product._id}>
+                        <img src={product.image} alt="product-img" />
                         <div>
-                            <p>size: {product.size}</p>
-                            <p>color: {product.color}</p>
+                            <h4>{product.title}</h4>
+                            <div>
+                                <p>size: {product.size}</p>
+                                <p>color: {product.color}</p>
+                            </div>
+                            <p className="price">{product.price}$</p>
                         </div>
-                        <p className="price">{price}$</p>
-                    </div>
-                </ProductMap>
-            ))}
-            </ProductsContainer>
+                    </ProductMap>
+                ))}
+                </div>
+                <div>
+                    <p className="totalPrice">Total Price: {price}$</p>
+                </div>
+            </OrderInfo>
         </Container>
     )
 }

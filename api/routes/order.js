@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const order = require('../controllers/order');
+const validator = require('../utils/validations');
 
-router.get('/order/:id', order.ordersForUser);
 
-router.post('/order', order.createOrder);
+router.get('/:id', order.ordersForUser);
+
+router.post('/', validator.checkOrder, order.createOrder);
 
 module.exports = router;
 

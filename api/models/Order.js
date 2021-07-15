@@ -6,11 +6,13 @@ const { String, Number, ObjectId } = Schema.Types;
 const orderSchema = Schema({
     user: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     products: [{ 
         type: ObjectId,
-        ref: 'Product'
+        ref: 'Product',
+        required: true
     }],
     price: {
         type: String,

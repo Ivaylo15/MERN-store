@@ -1,3 +1,4 @@
+const statusCodes = require("../constants/statusCodes");
 const Order = require("../models/Order");
 const User = require("../models/User");
 
@@ -19,9 +20,12 @@ module.exports = {
     },
     ordersForUser: async (req, res, next) => {
         const userId = req.params.id;
-        
-        Order.find({ user: userId }).populate('products')
-            .then((orders) => res.send(orders))
-            .catch(next);
+
+        try {
+            const orders = await Order.find({user: userId}).populate('products');
+            res.status(statusCodes.OK).send(orders);
+        } catch (e) {
+            res.status(statusCodes.InternalServerError).json({ message: e.message });
+        }
     }
 }
