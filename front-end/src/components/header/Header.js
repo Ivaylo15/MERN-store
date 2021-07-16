@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link, } from 'react-router-dom';
+import {  useSelector } from 'react-redux';
 import { selectUser } from '../../redux/userSlice';
-import { userServices } from '../../services/userServices';
 import { ShoppingCartIcon } from '@heroicons/react/outline';
 import { selectBasketProducts } from '../../redux/basketSlice';
 
@@ -36,12 +35,6 @@ const RightContainer = styled.div`
     align-items: center;
     position: relative;
 
-    p{
-        cursor: pointer;
-        :hover {
-            color: red;
-        }
-    }
     .basket{
         height: 2.5rem;
         margin-left: 0.5rem;
@@ -73,12 +66,6 @@ const LinkStyle = styled.div`
 const Header = () => {
     const user = useSelector(selectUser);
     const basket = useSelector(selectBasketProducts);
-    const history = useHistory();
-    const dispatch = useDispatch();
-
-    const signOut = () => {
-        userServices.logout(dispatch, history);
-    }
 
     return (
         <Container>
@@ -97,14 +84,11 @@ const Header = () => {
             <RightContainer>
                 {user?.username ?
                     (
-                        <>
-                            <Link to="/orders">
-                                <LinkStyle>
-                                    Orders
-                                </LinkStyle>
-                            </Link>
-                            <p onClick={signOut}>{user.username}</p>
-                        </>
+                        <Link to="/profile">
+                            <LinkStyle>
+                                {user.username}
+                            </LinkStyle>
+                        </Link>
                     ) : (
                         <Link to="/signIn">
                             <LinkStyle>

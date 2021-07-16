@@ -14,6 +14,7 @@ import Checkout from './components/checkout/Checkout';
 import Auth from './Auth';
 import { useCookies } from 'react-cookie';
 import UserOrders from './components/orders/UserOrders';
+import Profile from './components/user/profile/Profile';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route exact path="/signIn" render={(props) => user?.username ? <ErrorLog /> : <LoginPage {...props} />} />
           <Auth exact path="/orders" component={UserOrders} />
           <Route exact path="/checkout" component={Checkout} />
+          <Auth exact path="/profile" component={Profile} />
           <Auth exact path="/add" component={AddProduct} />
           <Auth exact path="/edit/:id" component={EditProduct} />
           <Route exact path="/:id" component={ProductView} />
