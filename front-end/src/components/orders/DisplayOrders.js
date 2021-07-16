@@ -4,36 +4,41 @@ import moment from 'moment';
 const Container = styled.div`
     border-bottom: 1px solid #ccc;
     padding: 2rem;
-    h3{
-        margin-bottom: 1rem;
-    }
+   
+    .header{
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+        h3{
+            margin-bottom: 1rem;
+        }
+        .date{
+            font-size: 14px;
+            font-weight: 600;  
+        }
+    } 
 `;
 
 const OrderInfo = styled.div`
     display: flex;
     justify-content: space-between;
 
-    .date{
-        margin: 0 0 2rem 1rem;
-        font-size: 14px;
-        font-weight: 600;
-        
-    }
     .totalPrice{
-        font-size: 30px;
+        margin-top: 2rem;
+        height: 35px;
+        font-size: 25px;
         font-weight: bold;
-        margin-right: 2rem;
         background-color: orange;
-        padding: 2rem;
+        padding: 1.5rem;
         border-radius: 1rem;
     }
 `;
 
 const ProductMap = styled.div`
     display: flex;
-    padding: 2rem;
+    padding: 1rem;
     img{
-        width: 200px;
+        width: 150px;
         margin-right: 2rem;
     }
     div{
@@ -49,7 +54,7 @@ const ProductMap = styled.div`
             font-weight: 500;
         }
         .price{
-            font-size: 30px;
+            font-size: 25px;
             font-weight: 500;
         }
     }
@@ -61,7 +66,10 @@ const DisplayOrders = ({ id, products, price, date }) => {
     const formatDate = moment(date).format('MMMM Do YYYY, h:mm:ss a')
     return (
         <Container>
-            <h3>Order: {id}</h3>
+            <div className="header">
+                <h3>Order: {id}</h3>
+                <p className="date">Created on: {formatDate}</p>
+            </div>
             <OrderInfo>
                 <div>{products.map(product => (
                     <ProductMap key={product._id}>
@@ -77,10 +85,7 @@ const DisplayOrders = ({ id, products, price, date }) => {
                     </ProductMap>
                 ))}
                 </div>
-                <div>
-                    <p className="date">Created on: {formatDate}</p>
-                    <p className="totalPrice">Total Price: ${price}</p>
-                </div>
+                <p className="totalPrice">Total Price: ${price}</p>
             </OrderInfo>
         </Container>
     )
