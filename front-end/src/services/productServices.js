@@ -1,16 +1,10 @@
 import axios from 'axios';
 import { constants } from '../constants/constants';
 import { setFilters, setProduct } from '../redux/productSlice';
-import { utilFunc } from './utils';
 
 export const productService = {
-    getProducts: (dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption) => {
-        const categoryUrl = utilFunc.stringifyUrl('category', categoryOption);
-        const sizeUrl = utilFunc.stringifyUrl('size', sizeOption);
-        const colorUrl = utilFunc.stringifyUrl('color', colorOption);
-        const priceUrl = utilFunc.stringifyUrl('price', priceOption);
-
-        axios.get(`${process.env.REACT_APP_BASE_URL}products?page=${currPage}&limit=${constants.productCount}${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`)
+    getProducts: (dispatch, currPage, searchUrl, categoryUrl, sizeUrl, colorUrl, priceUrl) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}products?page=${currPage}&limit=${constants.productCount}${searchUrl}${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`)
             .then(res => {
                 dispatch(setProduct(res.data))
             })

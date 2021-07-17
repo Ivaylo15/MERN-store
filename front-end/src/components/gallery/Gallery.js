@@ -6,7 +6,7 @@ import DisplayFilters from '../filter/DisplayFilters';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { productService } from "../../services/productServices";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFilters, selectProduct } from "../../redux/productSlice";
+import { selectFilters, selectProduct, selectSearch } from "../../redux/productSlice";
 import { utilFunc } from "../../services/utils";
 import { constants } from "../../constants/constants";
 
@@ -105,6 +105,7 @@ const Gallery = () => {
     const history = useHistory();
     const products = useSelector(selectProduct);
     const filters = useSelector(selectFilters);
+    const searchTitle = useSelector(selectSearch);
     const [currPage, setCurrPage] = useState(1);
     const [categoryOption, setCategoryOption] = useState('');
     const [sizeOption, setSizeOption] = useState([]);
@@ -127,10 +128,14 @@ const Gallery = () => {
     }, [])
 
     useEffect(() => {
+        let searchUrl = '';
         let categoryUrl = '';
         let sizeUrl = '';
         let colorUrl = '';
         let priceUrl = '';
+        if(searchTitle) {
+            searchUrl = utilFunc.stringifyUrl(constants.filterSearch, searchTitle);
+        }
         if (categoryOption) {
             categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
         }
@@ -146,10 +151,10 @@ const Gallery = () => {
 
         history.push({
             pathname: '/',
-            search: `?${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`
+            search: `?${searchUrl}${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`
         })
-        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption);
-    }, [dispatch, history, currPage, categoryOption, sizeOption, colorOption, priceOption]);
+        productService.getProducts(dispatch, currPage, searchUrl, categoryUrl, sizeUrl, colorUrl, priceUrl);
+    }, [dispatch, history, currPage, searchTitle, categoryOption, sizeOption, colorOption, priceOption]);
 
     useEffect(() => {
         productService.getFilters(dispatch);
