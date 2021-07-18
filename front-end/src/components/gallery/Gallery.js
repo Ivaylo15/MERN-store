@@ -128,32 +128,34 @@ const Gallery = () => {
     }, [])
 
     useEffect(() => {
-        let searchUrl = '';
-        let categoryUrl = '';
-        let sizeUrl = '';
-        let colorUrl = '';
-        let priceUrl = '';
+        const filterObject = {
+            searchUrl: '',
+            categoryUrl: '',
+            sizeUrl: '',
+            colorUrl: '',
+            priceUrl: '',
+        };
         if(searchTitle) {
-            searchUrl = utilFunc.stringifyUrl(constants.filterSearch, searchTitle);
+            filterObject.searchUrl = utilFunc.stringifyUrl(constants.filterSearch, searchTitle);
         }
         if (categoryOption) {
-            categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
+            filterObject.categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
         }
         if (sizeOption.length > 0) {
-            sizeUrl = utilFunc.stringifyUrl(constants.filterSize, sizeOption);
+            filterObject.sizeUrl = utilFunc.stringifyUrl(constants.filterSize, sizeOption);
         }
         if (colorOption.length > 0) {
-            colorUrl = utilFunc.stringifyUrl(constants.filterColor, colorOption);
+            filterObject.colorUrl = utilFunc.stringifyUrl(constants.filterColor, colorOption);
         }
         if (priceOption) {
-            priceUrl = utilFunc.stringifyUrl(constants.filterPrice, priceOption);
+            filterObject.priceUrl = utilFunc.stringifyUrl(constants.filterPrice, priceOption);
         }
 
         history.push({
             pathname: '/',
-            search: `?${searchUrl}${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`
+            search: `?${filterObject.searchUrl}${filterObject.categoryUrl}${filterObject.sizeUrl}${filterObject.colorUrl}${filterObject.priceUrl}`
         })
-        productService.getProducts(dispatch, currPage, searchUrl, categoryUrl, sizeUrl, colorUrl, priceUrl);
+        productService.getProducts(dispatch, currPage, filterObject.searchUrl, filterObject.categoryUrl, filterObject.sizeUrl, filterObject.colorUrl, filterObject.priceUrl);
     }, [dispatch, history, currPage, searchTitle, categoryOption, sizeOption, colorOption, priceOption]);
 
     useEffect(() => {
