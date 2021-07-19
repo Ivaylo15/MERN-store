@@ -1,5 +1,6 @@
 export const constants = {
     productCount: 12,
+    filterSearch: 'search',
     filterCategory: 'category',
     filterSize: 'size',
     filterColor: 'color',

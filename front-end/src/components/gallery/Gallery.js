@@ -6,7 +6,7 @@ import DisplayFilters from '../filter/DisplayFilters';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { productService } from "../../services/productServices";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFilters, selectProduct } from "../../redux/productSlice";
+import { selectFilters, selectProduct, selectSearch } from "../../redux/productSlice";
 import { utilFunc } from "../../services/utils";
 import { constants } from "../../constants/constants";
 
@@ -105,6 +105,7 @@ const Gallery = () => {
     const history = useHistory();
     const products = useSelector(selectProduct);
     const filters = useSelector(selectFilters);
+    const searchTitle = useSelector(selectSearch);
     const [currPage, setCurrPage] = useState(1);
     const [categoryOption, setCategoryOption] = useState('');
     const [sizeOption, setSizeOption] = useState([]);
@@ -127,29 +128,35 @@ const Gallery = () => {
     }, [])
 
     useEffect(() => {
-        let categoryUrl = '';
-        let sizeUrl = '';
-        let colorUrl = '';
-        let priceUrl = '';
+        const filterObject = {
+            searchUrl: '',
+            categoryUrl: '',
+            sizeUrl: '',
+            colorUrl: '',
+            priceUrl: '',
+        };
+        if(searchTitle) {
+            filterObject.searchUrl = utilFunc.stringifyUrl(constants.filterSearch, searchTitle);
+        }
         if (categoryOption) {
-            categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
+            filterObject.categoryUrl = utilFunc.stringifyUrl(constants.filterCategory, categoryOption);
         }
         if (sizeOption.length > 0) {
-            sizeUrl = utilFunc.stringifyUrl(constants.filterSize, sizeOption);
+            filterObject.sizeUrl = utilFunc.stringifyUrl(constants.filterSize, sizeOption);
         }
         if (colorOption.length > 0) {
-            colorUrl = utilFunc.stringifyUrl(constants.filterColor, colorOption);
+            filterObject.colorUrl = utilFunc.stringifyUrl(constants.filterColor, colorOption);
         }
         if (priceOption) {
-            priceUrl = utilFunc.stringifyUrl(constants.filterPrice, priceOption);
+            filterObject.priceUrl = utilFunc.stringifyUrl(constants.filterPrice, priceOption);
         }
 
         history.push({
             pathname: '/',
-            search: `?${categoryUrl}${sizeUrl}${colorUrl}${priceUrl}`
+            search: `?${filterObject.searchUrl}${filterObject.categoryUrl}${filterObject.sizeUrl}${filterObject.colorUrl}${filterObject.priceUrl}`
         })
-        productService.getProducts(dispatch, currPage, categoryOption, sizeOption, colorOption, priceOption);
-    }, [dispatch, history, currPage, categoryOption, sizeOption, colorOption, priceOption]);
+        productService.getProducts(dispatch, currPage, filterObject.searchUrl, filterObject.categoryUrl, filterObject.sizeUrl, filterObject.colorUrl, filterObject.priceUrl);
+    }, [dispatch, history, currPage, searchTitle, categoryOption, sizeOption, colorOption, priceOption]);
 
     useEffect(() => {
         productService.getFilters(dispatch);

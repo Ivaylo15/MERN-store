@@ -21,7 +21,6 @@ module.exports = {
 
         try {
             const updatedProduct = await Product.updateOne({ _id: id }, { title, category, size, color, price, image });
-
             redisClient.del(`product:${id}`)
             res.status(statusCodes.OK).send(updatedProduct);
 
@@ -42,14 +41,20 @@ module.exports = {
     paginatedResults: async (req, res, next) => {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
+        const searchReq = req.query.search
         const category = req.query.category;
         const color = req.query.color;
         const size = req.query.size;
         const price = req.query.price;
 
+        let search = '';
         const filterObject = {};
         const sortObject = {};
 
+        if (searchReq) {
+            search = searchReq;
+            filterObject.title = { "$regex": search, "$options": "i"}
+        }
         if (category) {
             filterObject.category = category;
         }

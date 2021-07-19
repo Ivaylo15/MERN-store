@@ -1,13 +1,15 @@
 import styled from 'styled-components';
-import { Link, } from 'react-router-dom';
-import {  useSelector } from 'react-redux';
+import { Link, useHistory, } from 'react-router-dom';
+import {  useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../redux/userSlice';
-import { ShoppingCartIcon } from '@heroicons/react/outline';
+import { SearchIcon, ShoppingCartIcon } from '@heroicons/react/outline';
 import { selectBasketProducts } from '../../redux/basketSlice';
+import { useState } from 'react';
+import { setSearchItem } from '../../redux/productSlice';
 
 const Container = styled.div`
     background-color: whitesmoke;
-    height: 4rem;
+    height: 4.5rem;
     border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
@@ -21,7 +23,6 @@ const LeftContainer = styled.div`
     display: flex;
     align-items: center;
     margin-left: 2rem;
-   
     p{
         cursor: pointer;
         :hover {
@@ -30,11 +31,34 @@ const LeftContainer = styled.div`
     }
 `
 
+const MiddleContainer = styled.form`
+    width: 30%;
+    display: flex;
+    align-items: center;
+    input{
+        width: 95%;
+        padding: 1rem;
+        border: none;
+        outline: none;
+    }
+    button{
+        border: none;
+        background-color: white;
+        padding: 0.38rem;
+        cursor: pointer;
+        .searchButton{
+            height: 2rem;
+        }
+        :hover {
+            color: red;
+        }
+    }
+`;
+
 const RightContainer = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-
     .basket{
         height: 2.5rem;
         margin-left: 0.5rem;
@@ -64,14 +88,23 @@ const LinkStyle = styled.div`
 `
 
 const Header = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const basket = useSelector(selectBasketProducts);
+    const [search, setSearch] = useState('');
+
+    const addSearch = (e) => {
+        e.preventDefault();
+        dispatch(setSearchItem(search));
+        history.push('/');
+    }
 
     return (
         <Container>
             <LeftContainer>
                 <Link to="/">
-                    <LinkStyle>
+                    <LinkStyle onClick={() => {setSearch(''); dispatch(setSearchItem(''))}}>
                         Gallery
                     </LinkStyle>
                 </Link>
@@ -81,6 +114,12 @@ const Header = () => {
                     </LinkStyle>
                 </Link>
             </LeftContainer>
+            <MiddleContainer>
+                <input type="text" placeholder="search..." value={search} onChange={e => setSearch(e.target.value)} />
+                <button type="submit" onClick={addSearch}>
+                    <SearchIcon className="searchButton"  />
+                </button>
+            </MiddleContainer>
             <RightContainer>
                 {user?.username ?
                     (
